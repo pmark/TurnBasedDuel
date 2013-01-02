@@ -18,6 +18,9 @@
 		A6061F751693E99B003B3640 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A6061F741693E99B003B3640 /* Default-568h@2x.png */; };
 		A6061F781693E99B003B3640 /* MainStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A6061F761693E99B003B3640 /* MainStoryboard.storyboard */; };
 		A6061F7B1693E99B003B3640 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A6061F7A1693E99B003B3640 /* ViewController.m */; };
+		A6061F821693E9BA003B3640 /* GameKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A6061F811693E9BA003B3640 /* GameKit.framework */; };
+		A6061F851693E9E1003B3640 /* GameKitTurnBasedMatchHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = A6061F841693E9E1003B3640 /* GameKitTurnBasedMatchHelper.m */; };
+		A6061F8C1693F665003B3640 /* GameKitHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = A6061F8B1693F665003B3640 /* GameKitHelper.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -37,6 +40,12 @@
 		A6061F771693E99B003B3640 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/MainStoryboard.storyboard; sourceTree = "<group>"; };
 		A6061F791693E99B003B3640 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
 		A6061F7A1693E99B003B3640 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		A6061F811693E9BA003B3640 /* GameKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameKit.framework; path = System/Library/Frameworks/GameKit.framework; sourceTree = SDKROOT; };
+		A6061F831693E9E1003B3640 /* GameKitTurnBasedMatchHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameKitTurnBasedMatchHelper.h; sourceTree = "<group>"; };
+		A6061F841693E9E1003B3640 /* GameKitTurnBasedMatchHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GameKitTurnBasedMatchHelper.m; sourceTree = "<group>"; };
+		A6061F8A1693F665003B3640 /* GameKitHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameKitHelper.h; sourceTree = "<group>"; };
+		A6061F8B1693F665003B3640 /* GameKitHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GameKitHelper.m; sourceTree = "<group>"; };
+		A6061F8D1693F72A003B3640 /* GameConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameConstants.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -44,6 +53,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A6061F821693E9BA003B3640 /* GameKit.framework in Frameworks */,
 				A6061F5F1693E99B003B3640 /* UIKit.framework in Frameworks */,
 				A6061F611693E99B003B3640 /* Foundation.framework in Frameworks */,
 				A6061F631693E99B003B3640 /* CoreGraphics.framework in Frameworks */,
@@ -73,6 +83,7 @@
 		A6061F5D1693E99B003B3640 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				A6061F811693E9BA003B3640 /* GameKit.framework */,
 				A6061F5E1693E99B003B3640 /* UIKit.framework */,
 				A6061F601693E99B003B3640 /* Foundation.framework */,
 				A6061F621693E99B003B3640 /* CoreGraphics.framework */,
@@ -85,10 +96,15 @@
 			children = (
 				A6061F6D1693E99B003B3640 /* AppDelegate.h */,
 				A6061F6E1693E99B003B3640 /* AppDelegate.m */,
+				A6061F8A1693F665003B3640 /* GameKitHelper.h */,
+				A6061F8B1693F665003B3640 /* GameKitHelper.m */,
+				A6061F831693E9E1003B3640 /* GameKitTurnBasedMatchHelper.h */,
+				A6061F841693E9E1003B3640 /* GameKitTurnBasedMatchHelper.m */,
+				A6061F8D1693F72A003B3640 /* GameConstants.h */,
 				A6061F761693E99B003B3640 /* MainStoryboard.storyboard */,
+				A6061F651693E99B003B3640 /* Supporting Files */,
 				A6061F791693E99B003B3640 /* ViewController.h */,
 				A6061F7A1693E99B003B3640 /* ViewController.m */,
-				A6061F651693E99B003B3640 /* Supporting Files */,
 			);
 			path = Game;
 			sourceTree = "<group>";
@@ -176,6 +192,8 @@
 				A6061F6B1693E99B003B3640 /* main.m in Sources */,
 				A6061F6F1693E99B003B3640 /* AppDelegate.m in Sources */,
 				A6061F7B1693E99B003B3640 /* ViewController.m in Sources */,
+				A6061F851693E9E1003B3640 /* GameKitTurnBasedMatchHelper.m in Sources */,
+				A6061F8C1693F665003B3640 /* GameKitHelper.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

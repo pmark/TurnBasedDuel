@@ -1,0 +1,16 @@
+build
+*.xcodeproj/*.mode1v3
+*.xcodeproj/*.mode2v3
+*.xcodeproj/*.pbxuser
+*.xcodeproj/*.perspectivev3
+*.xcodeproj/project.xcworkspace/
+*.xcodeproj/project.xcworkspace/xcuserdata
+*.xcodeproj/xcuserdata
+*.xcodeproj/xcuserdata/*
+*.xcodeproj/xcuserdata/*.xcuserdatad
+*.swp
+*~.nib
+.DS_Store
+
+*/errorLogFromLastBuild.txt
+web/spin/.idea/workspace.xml
