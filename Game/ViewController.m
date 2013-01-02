@@ -7,13 +7,22 @@
 //
 
 #import "ViewController.h"
-#import "GameKitTurnBasedMatchHelper.h"
 
 @interface ViewController ()
 
 @end
 
 @implementation ViewController
+
+- (IBAction)moreButtonWasTapped:(UIButton *)sender
+{
+    NSLog(@"More button");
+}
+
+- (IBAction)newGameButtonWasTapped:(UIButton *)sender
+{
+    [self findMatch];
+}
 
 - (void)findMatch
 {
@@ -22,10 +31,15 @@
                                                       showExistingMatches:YES];
 }
 
+#pragma mark -
+
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    [self findMatch];
+    
+    [GameKitTurnBasedMatchHelper sharedInstance].tbDelegate = self;
+
 }
 
 - (void)didReceiveMemoryWarning
@@ -51,8 +65,8 @@
     }
     else
     {
-        int playerNum = [match.participants
-                         indexOfObject:match.currentParticipant] + 1;
+        int playerNum = [match.participants indexOfObject:match.currentParticipant] + 1;
+
         statusString = [NSString stringWithFormat:
                         @"Player %d's Turn", playerNum];
     }
@@ -67,6 +81,7 @@
 {
     NSLog(@"Entering new game...");
     // Tell user: Player 1's Turn (that's you)
+    
     
 }
 
@@ -189,5 +204,81 @@
 }
 
 #pragma mark -
+
+- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
+{
+    NSLog(@"There are %i matches", [[GameKitTurnBasedMatchHelper sharedInstance].matches count]);
+    
+    if (section == 0)
+    {
+        return [[GameKitTurnBasedMatchHelper sharedInstance].matches count];
+    }
+    else
+    {
+        return 2;
+    }
+}
+
+- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    static NSString *MatchCellIdentifier = @"MatchCell";
+    UICollectionViewCell *cell = nil;
+    
+    if (indexPath.section == 0)
+    {
+        // Match cell.
+        
+        cell = [collectionView dequeueReusableCellWithReuseIdentifier:MatchCellIdentifier
+                                                         forIndexPath:indexPath];
+
+    }
+    else
+    {
+        // Buttons
+        
+        if (indexPath.row == 0)
+        {
+            cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"NewMatchCell"
+                                                             forIndexPath:indexPath];
+        }
+        else
+        {
+            cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"MoreCell"
+                                                             forIndexPath:indexPath];
+        }
+
+    }
+
+    return cell;    
+}
+
+- (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
+{
+    return 2;
+}
+
+- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (indexPath.section == 0)
+    {
+        // A match
+        
+        NSLog(@"Load match");
+        
+        GKTurnBasedMatch *match = (GKTurnBasedMatch *)[[GameKitTurnBasedMatchHelper sharedInstance].matches objectAtIndex:indexPath.row];
+        
+        [self performSegueWithIdentifier:@"GameSegue" sender:nil];
+
+    }
+    else
+    {
+    }
+
+}
+
+- (void)didFetchMatches:(NSArray*)matches
+{
+    [self.menuCollection reloadData];
+}
 
 @end

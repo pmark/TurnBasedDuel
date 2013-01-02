@@ -7,7 +7,14 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "GameKitTurnBasedMatchHelper.h"
 
-@interface ViewController : UIViewController
+@interface ViewController : UIViewController <UICollectionViewDataSource, UICollectionViewDelegate, GameKitTurnBasedMatchHelperDelegate>
+
+@property (weak, nonatomic) IBOutlet UICollectionView *menuCollection;
+
+@property (nonatomic, strong) NSMutableArray *matches;
+
+- (IBAction)newGameButtonWasTapped:(id)sender;
 
 @end

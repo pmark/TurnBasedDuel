@@ -50,6 +50,7 @@ static GameKitTurnBasedMatchHelper *sharedHelper = nil;
 {
     [super localPlayerWasAuthenticated];
     [GKTurnBasedEventHandler sharedTurnBasedEventHandler].delegate = self;
+    [self loadMatches];
 }
 
 - (void)findMatchWithMinPlayers:(int)minPlayers
@@ -214,6 +215,18 @@ static GameKitTurnBasedMatchHelper *sharedHelper = nil;
     {
         [self.tbDelegate sendNotice:@"Another Game Ended!" forMatch:match];
     }
+}
+
+- (void)loadMatches
+{
+    [GKTurnBasedMatch loadMatchesWithCompletionHandler:^(NSArray *matches, NSError *error) {
+        self.matches = matches;
+        
+        if (self.tbDelegate)
+        {
+            [self.tbDelegate didFetchMatches:matches];
+        }
+    }];
 }
 
 @end

@@ -58,6 +58,7 @@
         if (localPlayer.authenticated)
         {
             self.gameCenterFeaturesEnabled = YES;
+            [self localPlayerWasAuthenticated];
         }
         else if (viewController)
         {

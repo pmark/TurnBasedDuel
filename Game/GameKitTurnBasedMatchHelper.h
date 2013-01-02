@@ -17,6 +17,7 @@
 - (void)receiveEndGame:(GKTurnBasedMatch *)match;
 - (void)sendNotice:(NSString *)notice
           forMatch:(GKTurnBasedMatch *)match;
+- (void)didFetchMatches:(NSArray*)matches;
 @end
 
 
@@ -25,6 +26,7 @@
 }
 
 @property (strong) GKTurnBasedMatch *currentMatch;
+@property (strong) NSArray *matches;
 @property (nonatomic, assign) id <GameKitTurnBasedMatchHelperDelegate> tbDelegate;
 
 + (GameKitTurnBasedMatchHelper *)sharedInstance;

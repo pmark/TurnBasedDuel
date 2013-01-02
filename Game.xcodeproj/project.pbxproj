@@ -21,6 +21,7 @@
 		A6061F821693E9BA003B3640 /* GameKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A6061F811693E9BA003B3640 /* GameKit.framework */; };
 		A6061F851693E9E1003B3640 /* GameKitTurnBasedMatchHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = A6061F841693E9E1003B3640 /* GameKitTurnBasedMatchHelper.m */; };
 		A6061F8C1693F665003B3640 /* GameKitHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = A6061F8B1693F665003B3640 /* GameKitHelper.m */; };
+		A6061FB716942D74003B3640 /* GameViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A6061FB616942D74003B3640 /* GameViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -46,6 +47,8 @@
 		A6061F8A1693F665003B3640 /* GameKitHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameKitHelper.h; sourceTree = "<group>"; };
 		A6061F8B1693F665003B3640 /* GameKitHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GameKitHelper.m; sourceTree = "<group>"; };
 		A6061F8D1693F72A003B3640 /* GameConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameConstants.h; sourceTree = "<group>"; };
+		A6061FB516942D74003B3640 /* GameViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameViewController.h; sourceTree = "<group>"; };
+		A6061FB616942D74003B3640 /* GameViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GameViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -96,11 +99,13 @@
 			children = (
 				A6061F6D1693E99B003B3640 /* AppDelegate.h */,
 				A6061F6E1693E99B003B3640 /* AppDelegate.m */,
+				A6061F8D1693F72A003B3640 /* GameConstants.h */,
 				A6061F8A1693F665003B3640 /* GameKitHelper.h */,
 				A6061F8B1693F665003B3640 /* GameKitHelper.m */,
 				A6061F831693E9E1003B3640 /* GameKitTurnBasedMatchHelper.h */,
 				A6061F841693E9E1003B3640 /* GameKitTurnBasedMatchHelper.m */,
-				A6061F8D1693F72A003B3640 /* GameConstants.h */,
+				A6061FB516942D74003B3640 /* GameViewController.h */,
+				A6061FB616942D74003B3640 /* GameViewController.m */,
 				A6061F761693E99B003B3640 /* MainStoryboard.storyboard */,
 				A6061F651693E99B003B3640 /* Supporting Files */,
 				A6061F791693E99B003B3640 /* ViewController.h */,
@@ -194,6 +199,7 @@
 				A6061F7B1693E99B003B3640 /* ViewController.m in Sources */,
 				A6061F851693E9E1003B3640 /* GameKitTurnBasedMatchHelper.m in Sources */,
 				A6061F8C1693F665003B3640 /* GameKitHelper.m in Sources */,
+				A6061FB716942D74003B3640 /* GameViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
