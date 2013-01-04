@@ -7,9 +7,14 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "PlayerCache.h"
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
+@property (strong, nonatomic) PlayerCache *playerCache;
 
 @end
+
+
+#define APP_DELEGATE ((AppDelegate*)[UIApplication sharedApplication].delegate)

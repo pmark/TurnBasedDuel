@@ -8,6 +8,7 @@
 
 #import "GameKitHelper.h"
 #import "GameConstants.h"
+#import "AppDelegate.h"
 
 @interface GameKitHelper ()
 {
@@ -33,7 +34,7 @@
 
 #pragma mark Singleton stuff
 
-+ (id)sharedGameKitHelper
++ (id)sharedInstance
 {
     static GameKitHelper *sharedGameKitHelper;
     static dispatch_once_t onceToken;
@@ -111,21 +112,24 @@
 
 #pragma mark -
 
-- (void) loadPlayerPhoto: (GKPlayer*) player
+- (void)loadPlayerPhoto:(GKPlayer*)player
 {
+
     [player loadPhotoForSize:GKPhotoSizeSmall withCompletionHandler:^(UIImage *photo, NSError *error) {
         if (photo != nil)
         {
-            //[self storePhoto:photo forPlayer:player];
+            NSLog(@"Loaded photo for %@", player.alias);
+            [APP_DELEGATE.playerCache cachePhoto:photo forPlayer:player];
         }
         if (error != nil)
         {
             // Handle the error if necessary.
+            NSLog(@"Error fetching player photo: %@", [error localizedDescription]);
         }
     }];
 }
 
-- (void) retrieveFriends
+- (void)retrieveFriends
 {
     GKLocalPlayer *lp = [GKLocalPlayer localPlayer];
     if (lp.authenticated)
@@ -139,9 +143,9 @@
     }
 }
 
-- (void)getPlayerInfo:(NSArray*)playerList
+- (void)getPlayerInfo:(NSArray*)playerList delegate:(NSObject<GameKitHelperProtocol>*)delegate
 {
-    if (self.gameCenterFeaturesEnabled == NO)
+    if (!self.gameCenterFeaturesEnabled)
         return;
     
     if ([playerList count] > 0)
@@ -151,12 +155,17 @@
                           
                           [self setLastError:error];
                           
-                          if ([self.delegate respondsToSelector:@selector(onPlayerInfoReceived:)])
+                          if ([delegate respondsToSelector:@selector(onPlayerInfoReceived:)])
                           {
-                              [self.delegate onPlayerInfoReceived:players];
+                              [delegate onPlayerInfoReceived:players];
                           }
                       }];
 	}
+}
+
+- (void)getPlayerInfo:(NSArray*)playerList
+{
+    [self getPlayerInfo:playerList delegate:self.delegate];
 }
 
 - (void)inviteFriends:(NSArray*)identifiers
@@ -179,7 +188,7 @@
 }
 
 #pragma mark Property setters
--(void) setLastError:(NSError*)error
+-(void)setLastError:(NSError*)error
 {
     _lastError = [error copy];
     
@@ -211,13 +220,13 @@
 	return [UIApplication sharedApplication].keyWindow.rootViewController;
 }
 
-- (void) presentViewController:(UIViewController*)vc
+- (void)presentViewController:(UIViewController*)vc
 {
 	UIViewController *rootVC = [self getRootViewController];
 	[rootVC presentViewController:vc animated:YES completion:nil];
 }
 
-- (void) dismissModalViewController
+- (void)dismissModalViewController
 {
     UIViewController *rootVC = [self getRootViewController];
     [rootVC dismissViewControllerAnimated:YES completion:nil];

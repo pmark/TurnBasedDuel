@@ -7,8 +7,13 @@
 //
 
 #import "ViewController.h"
+#import "GameViewController.h"
+#import "MatchCell.h"
+#import "AppDelegate.h"
 
 @interface ViewController ()
+
+@property (nonatomic, strong) GKTurnBasedMatch *currentMatch;
 
 @end
 
@@ -40,6 +45,12 @@
     
     [GameKitTurnBasedMatchHelper sharedInstance].tbDelegate = self;
 
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    [self.menuCollection reloadData];
 }
 
 - (void)didReceiveMemoryWarning
@@ -221,16 +232,65 @@
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString *MatchCellIdentifier = @"MatchCell";
     UICollectionViewCell *cell = nil;
+
     
     if (indexPath.section == 0)
     {
-        // Match cell.
+        // Match cell
         
-        cell = [collectionView dequeueReusableCellWithReuseIdentifier:MatchCellIdentifier
-                                                         forIndexPath:indexPath];
+        MatchCell *matchCell = (MatchCell*)[collectionView dequeueReusableCellWithReuseIdentifier:@"OneMatchCell"
+                                                                                     forIndexPath:indexPath];
 
+        GKTurnBasedMatch *match = [[GameKitTurnBasedMatchHelper sharedInstance].matches objectAtIndex:indexPath.row];
+        GKPlayer *player1 = [APP_DELEGATE.playerCache player:0 amongParticipants:match.participants];
+        GKPlayer *player2 = [APP_DELEGATE.playerCache player:1 amongParticipants:match.participants];
+        
+        NSString *player1ID = ((GKTurnBasedParticipant*)[match.participants objectAtIndex:0]).playerID;
+        NSString *player2ID = ((GKTurnBasedParticipant*)[match.participants objectAtIndex:1]).playerID;
+        
+        matchCell.player1ID = player1ID;
+        matchCell.player2ID = player2ID;
+        matchCell.matchName.text = match.matchID;
+
+        GKPlayer *opponentPlayer = nil;
+        if ([[GKLocalPlayer localPlayer].playerID isEqualToString:player1ID])
+        {
+            opponentPlayer = [APP_DELEGATE.playerCache playerWithID:player2ID];
+        }
+        else
+        {
+            opponentPlayer = [APP_DELEGATE.playerCache playerWithID:player2ID];
+        }
+
+        if (opponentPlayer)
+        {
+            matchCell.opponent.text = opponentPlayer.alias;
+        }
+        else
+        {
+            matchCell.opponent.text = @"";
+        }
+        
+        // If local player is the currentParticipant then it's my turn.
+        
+        if ([match.currentParticipant.playerID isEqualToString:[GKLocalPlayer localPlayer].playerID])
+        {
+            matchCell.status.text = @"Your Turn";
+            matchCell.status.textColor = [UIColor blackColor];
+        }
+        else
+        {
+            matchCell.status.text = @"Waiting For Turn";
+            matchCell.status.textColor = [UIColor lightGrayColor];
+        }
+        
+        matchCell.player1Photo.image = [APP_DELEGATE.playerCache photoForPlayer:player1];
+        matchCell.player2Photo.image = [APP_DELEGATE.playerCache photoForPlayer:player2];
+        
+        cell = matchCell;
+        
+//        NSLog(@"--------------------photo %@", matchCell.player1Photo.image);
     }
     else
     {
@@ -265,7 +325,7 @@
         
         NSLog(@"Load match");
         
-        GKTurnBasedMatch *match = (GKTurnBasedMatch *)[[GameKitTurnBasedMatchHelper sharedInstance].matches objectAtIndex:indexPath.row];
+        self.currentMatch = (GKTurnBasedMatch *)[[GameKitTurnBasedMatchHelper sharedInstance].matches objectAtIndex:indexPath.row];
         
         [self performSegueWithIdentifier:@"GameSegue" sender:nil];
 
@@ -276,9 +336,19 @@
 
 }
 
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    if ([segue.identifier isEqualToString:@"GameSegue"])
+    {
+        GameViewController *c = (GameViewController*)segue.destinationViewController;
+        c.match = self.currentMatch;
+    }
+}
+
 - (void)didFetchMatches:(NSArray*)matches
 {
     [self.menuCollection reloadData];
+    [[GameKitTurnBasedMatchHelper sharedInstance] cachePlayerData];
 }
 
 @end

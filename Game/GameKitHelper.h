@@ -26,11 +26,13 @@
 @property (nonatomic, assign) BOOL gameCenterFeaturesEnabled;
 @property (nonatomic, strong) NSError *lastError;
 
-+ (id)sharedGameKitHelper;
++ (id)sharedInstance;
 - (void)authenticateLocalPlayer;
 - (void)getPlayerInfo:(NSArray*)playerList;
+- (void)getPlayerInfo:(NSArray*)playerList delegate:(NSObject<GameKitHelperProtocol>*)delegate;
 - (void)presentViewController:(UIViewController*)vc;
 - (void)dismissModalViewController;
 - (void)localPlayerWasAuthenticated;
+- (void)loadPlayerPhoto:(GKPlayer*)player;
 
 @end

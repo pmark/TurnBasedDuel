@@ -22,6 +22,8 @@
 		A6061F851693E9E1003B3640 /* GameKitTurnBasedMatchHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = A6061F841693E9E1003B3640 /* GameKitTurnBasedMatchHelper.m */; };
 		A6061F8C1693F665003B3640 /* GameKitHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = A6061F8B1693F665003B3640 /* GameKitHelper.m */; };
 		A6061FB716942D74003B3640 /* GameViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A6061FB616942D74003B3640 /* GameViewController.m */; };
+		A60620DA16964BE2003B3640 /* PlayerCache.m in Sources */ = {isa = PBXBuildFile; fileRef = A60620D916964BE1003B3640 /* PlayerCache.m */; };
+		A611942016968EE30074FB9B /* MatchCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A611941F16968EE20074FB9B /* MatchCell.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -49,6 +51,10 @@
 		A6061F8D1693F72A003B3640 /* GameConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameConstants.h; sourceTree = "<group>"; };
 		A6061FB516942D74003B3640 /* GameViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameViewController.h; sourceTree = "<group>"; };
 		A6061FB616942D74003B3640 /* GameViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GameViewController.m; sourceTree = "<group>"; };
+		A60620D816964BE1003B3640 /* PlayerCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlayerCache.h; sourceTree = "<group>"; };
+		A60620D916964BE1003B3640 /* PlayerCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlayerCache.m; sourceTree = "<group>"; };
+		A611941E16968EE20074FB9B /* MatchCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MatchCell.h; sourceTree = "<group>"; };
+		A611941F16968EE20074FB9B /* MatchCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MatchCell.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -110,6 +116,10 @@
 				A6061F651693E99B003B3640 /* Supporting Files */,
 				A6061F791693E99B003B3640 /* ViewController.h */,
 				A6061F7A1693E99B003B3640 /* ViewController.m */,
+				A60620D816964BE1003B3640 /* PlayerCache.h */,
+				A60620D916964BE1003B3640 /* PlayerCache.m */,
+				A611941E16968EE20074FB9B /* MatchCell.h */,
+				A611941F16968EE20074FB9B /* MatchCell.m */,
 			);
 			path = Game;
 			sourceTree = "<group>";
@@ -200,6 +210,8 @@
 				A6061F851693E9E1003B3640 /* GameKitTurnBasedMatchHelper.m in Sources */,
 				A6061F8C1693F665003B3640 /* GameKitHelper.m in Sources */,
 				A6061FB716942D74003B3640 /* GameViewController.m in Sources */,
+				A60620DA16964BE2003B3640 /* PlayerCache.m in Sources */,
+				A611942016968EE30074FB9B /* MatchCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -234,7 +246,7 @@
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Peter Anderson (PK484EQWS2)";
 				COPY_PHASE_STRIP = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
@@ -248,6 +260,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				PROVISIONING_PROFILE = "F9D4754F-6DFD-4849-A2A6-F21687B4B10C";
 				SDKROOT = iphoneos;
 			};
 			name = Debug;
@@ -261,7 +274,6 @@
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
@@ -315,6 +327,7 @@
 				A6061F801693E99B003B3640 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

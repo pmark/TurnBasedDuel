@@ -33,5 +33,7 @@
 - (void)findMatchWithMinPlayers:(int)minPlayers
                      maxPlayers:(int)maxPlayers
             showExistingMatches:(BOOL)showExistingMatches;
+- (void)cachePlayerData;
+- (NSString*)matchStatusDisplayName:(GKTurnBasedMatchStatus)status;
 
 @end

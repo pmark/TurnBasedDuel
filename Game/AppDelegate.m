@@ -13,7 +13,8 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    // Override point for customization after application launch.
+    self.playerCache = [[PlayerCache alloc] init];
+    
     [[GameKitTurnBasedMatchHelper sharedInstance] authenticateLocalPlayer];
     return YES;
 }

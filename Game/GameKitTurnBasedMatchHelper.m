@@ -229,4 +229,57 @@ static GameKitTurnBasedMatchHelper *sharedHelper = nil;
     }];
 }
 
+- (void)cachePlayerData
+{
+    NSMutableArray *ids = [NSMutableArray array];
+    
+    for (GKTurnBasedMatch *match in self.matches)
+    {
+        for (GKTurnBasedParticipant *participant in match.participants)
+        {
+            if (!participant.playerID)
+            {
+                continue;
+            }
+            
+            BOOL cached = ([APP_DELEGATE.playerCache.players objectForKey:participant.playerID] != nil);
+            BOOL alreadyAdded = [ids containsObject:participant.playerID];
+            
+            if (!cached && !alreadyAdded)
+            {
+                NSLog(@"About to fetch player %@", participant.playerID);
+                [ids addObject:participant.playerID];
+            }
+        }
+    }
+    
+    [[GameKitTurnBasedMatchHelper sharedInstance] getPlayerInfo:ids delegate:APP_DELEGATE.playerCache];
+}
+
+- (NSString*)matchStatusDisplayName:(GKTurnBasedMatchStatus)status
+{
+    NSString *name = @"";
+    
+    switch (status)
+    {
+        case GKTurnBasedMatchStatusOpen:
+            name = @"Open";
+            break;
+            
+        case GKTurnBasedMatchStatusEnded:
+            name = @"Game Over";
+            break;
+            
+        case GKTurnBasedMatchStatusMatching:
+            name = @"Waiting";
+            break;
+            
+        default:
+            name = @"???";
+            break;
+    }
+    
+    return name;
+}
+
 @end
