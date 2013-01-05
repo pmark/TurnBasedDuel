@@ -14,6 +14,10 @@
 @interface ViewController ()
 
 @property (nonatomic, strong) GKTurnBasedMatch *currentMatch;
+@property (nonatomic, strong) NSMutableArray *sortedMatches;
+
+// Navigate to new game after view appears
+//@property (nonatomic, strong)
 
 @end
 
@@ -44,13 +48,26 @@
     [super viewDidLoad];
     
     [GameKitTurnBasedMatchHelper sharedInstance].tbDelegate = self;
-
+    
+    [self loadMatches];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadMatches) name:NOTIF_TURN_EVENT object:nil];
 }
 
-- (void)viewDidAppear:(BOOL)animated
+- (void)loadMatches
 {
-    [super viewDidAppear:animated];
+    // TODO: Sort by last move time.
+    self.sortedMatches = [NSMutableArray arrayWithArray:[[GameKitTurnBasedMatchHelper sharedInstance].matches allValues]];
     [self.menuCollection reloadData];
+    
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    NSLog(@"\n\nviewWillAppear\n\n");
+    
+    [self loadMatches];
 }
 
 - (void)didReceiveMemoryWarning
@@ -91,9 +108,12 @@
 -(void)enterNewGame:(GKTurnBasedMatch *)match
 {
     NSLog(@"Entering new game...");
-    // Tell user: Player 1's Turn (that's you)
     
-    
+    [[GameKitTurnBasedMatchHelper sharedInstance] cachePlayerData];
+    [GameKitTurnBasedMatchHelper sharedInstance].currentMatch = match;
+
+    //    [self loadMatches];
+
 }
 
 -(void)takeTurn:(GKTurnBasedMatch *)match
@@ -103,16 +123,9 @@
     int playerNum = [match.participants
                      indexOfObject:match.currentParticipant] + 1;
     
-    NSString *statusString = [NSString stringWithFormat:
-                              @"Player %d's Turn (that's you)", playerNum];
+    NSString *statusString = [NSString stringWithFormat:@"Player %d's Turn (that's you)", playerNum];
     
     NSLog(@"takeTurn: %@", statusString);
-    
-    if ([match.matchData bytes])
-    {
-//        NSString *storySoFar = [NSString stringWithUTF8String:
-//                                [match.matchData bytes]];
-    }
     
     [self checkForEnding:match.matchData];
 }
@@ -144,7 +157,7 @@
 
 - (IBAction)sendTurn:(id)sender
 {
-    GKTurnBasedMatch *currentMatch = [[GameKitTurnBasedMatchHelper sharedInstance] currentMatch];
+    GKTurnBasedMatch *currentMatch = [GameKitTurnBasedMatchHelper sharedInstance].currentMatch;
 
     NSString *newStoryString = @"Story";
     
@@ -218,11 +231,9 @@
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
-    NSLog(@"There are %i matches", [[GameKitTurnBasedMatchHelper sharedInstance].matches count]);
-    
     if (section == 0)
     {
-        return [[GameKitTurnBasedMatchHelper sharedInstance].matches count];
+        return [self.sortedMatches count];
     }
     else
     {
@@ -242,7 +253,7 @@
         MatchCell *matchCell = (MatchCell*)[collectionView dequeueReusableCellWithReuseIdentifier:@"OneMatchCell"
                                                                                      forIndexPath:indexPath];
 
-        GKTurnBasedMatch *match = [[GameKitTurnBasedMatchHelper sharedInstance].matches objectAtIndex:indexPath.row];
+        GKTurnBasedMatch *match = [self.sortedMatches objectAtIndex:indexPath.row];
         GKPlayer *player1 = [APP_DELEGATE.playerCache player:0 amongParticipants:match.participants];
         GKPlayer *player2 = [APP_DELEGATE.playerCache player:1 amongParticipants:match.participants];
         
@@ -260,7 +271,7 @@
         }
         else
         {
-            opponentPlayer = [APP_DELEGATE.playerCache playerWithID:player2ID];
+            opponentPlayer = [APP_DELEGATE.playerCache playerWithID:player1ID];
         }
 
         if (opponentPlayer)
@@ -287,6 +298,8 @@
         
         matchCell.player1Photo.image = [APP_DELEGATE.playerCache photoForPlayer:player1];
         matchCell.player2Photo.image = [APP_DELEGATE.playerCache photoForPlayer:player2];
+        
+        matchCell.matchStatus.text = [GameKitTurnBasedMatchHelper matchStatusDisplayName:match.status];
         
         cell = matchCell;
         
@@ -325,7 +338,7 @@
         
         NSLog(@"Load match");
         
-        self.currentMatch = (GKTurnBasedMatch *)[[GameKitTurnBasedMatchHelper sharedInstance].matches objectAtIndex:indexPath.row];
+        [GameKitTurnBasedMatchHelper sharedInstance].currentMatch = (GKTurnBasedMatch *)[self.sortedMatches objectAtIndex:indexPath.row];
         
         [self performSegueWithIdentifier:@"GameSegue" sender:nil];
 
@@ -341,12 +354,13 @@
     if ([segue.identifier isEqualToString:@"GameSegue"])
     {
         GameViewController *c = (GameViewController*)segue.destinationViewController;
-        c.match = self.currentMatch;
+        c.match = [GameKitTurnBasedMatchHelper sharedInstance].currentMatch;
     }
 }
 
 - (void)didFetchMatches:(NSArray*)matches
 {
+    [self loadMatches];
     [self.menuCollection reloadData];
     [[GameKitTurnBasedMatchHelper sharedInstance] cachePlayerData];
 }

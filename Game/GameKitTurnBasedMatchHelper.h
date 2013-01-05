@@ -10,6 +10,9 @@
 #import <GameKit/GameKit.h>
 #import "GameKitHelper.h"
 
+#define NOTIF_TURN_EVENT @"NOTIF_TURN_EVENT"
+#define NOTIF_NEW_GAME @"NOTIF_NEW_GAME"
+
 @protocol GameKitTurnBasedMatchHelperDelegate
 - (void)enterNewGame:(GKTurnBasedMatch *)match;
 - (void)layoutMatch:(GKTurnBasedMatch *)match;
@@ -26,14 +29,14 @@
 }
 
 @property (strong) GKTurnBasedMatch *currentMatch;
-@property (strong) NSArray *matches;
+@property (strong) NSMutableDictionary *matches;
 @property (nonatomic, assign) id <GameKitTurnBasedMatchHelperDelegate> tbDelegate;
 
 + (GameKitTurnBasedMatchHelper *)sharedInstance;
++ (NSString*)matchStatusDisplayName:(GKTurnBasedMatchStatus)status;
 - (void)findMatchWithMinPlayers:(int)minPlayers
                      maxPlayers:(int)maxPlayers
             showExistingMatches:(BOOL)showExistingMatches;
 - (void)cachePlayerData;
-- (NSString*)matchStatusDisplayName:(GKTurnBasedMatchStatus)status;
 
 @end

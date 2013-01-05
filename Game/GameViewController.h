@@ -16,7 +16,10 @@
 @property (weak, nonatomic) IBOutlet UILabel *player2Label;
 @property (weak, nonatomic) IBOutlet UIImageView *player1Photo;
 @property (weak, nonatomic) IBOutlet UIImageView *player2Photo;
+@property (weak, nonatomic) IBOutlet UILabel *statusLabel;
+@property (weak, nonatomic) IBOutlet UIButton *playButton;
 
 - (IBAction)backButtonWasTapped:(id)sender;
+- (IBAction)playButtonWasTapped:(UIButton *)sender;
 
 @end

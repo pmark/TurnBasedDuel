@@ -80,16 +80,21 @@ static GameKitTurnBasedMatchHelper *sharedHelper = nil;
 -(void)turnBasedMatchmakerViewController:(GKTurnBasedMatchmakerViewController *)viewController
                             didFindMatch:(GKTurnBasedMatch *)match
 {
-    [self dismissModalViewController];
     NSLog(@"did find match, %@", match);
+
+    // Update the match list.
     
-    self.currentMatch = match;
+    [self.matches setValue:match forKey:match.matchID];
+    
+    [self dismissModalViewController];
     
     GKTurnBasedParticipant *firstParticipant = [match.participants objectAtIndex:0];
     
     if (firstParticipant.lastTurnDate == NULL)
     {
         // It's a new game!
+
+        NSLog(@"didFindMatch: New game");
         [self.tbDelegate enterNewGame:match];
     }
     else
@@ -97,11 +102,15 @@ static GameKitTurnBasedMatchHelper *sharedHelper = nil;
         if ([match.currentParticipant.playerID isEqualToString:[GKLocalPlayer localPlayer].playerID])
         {
             // It's your turn!
+
+            NSLog(@"didFindMatch: It's your turn.");
             [self.tbDelegate takeTurn:match];
         }
         else
         {
             // It's not your turn, just display the game state.
+            
+            NSLog(@"didFindMatch: Not your turn.");
             [self.tbDelegate layoutMatch:match];
         }
     }
@@ -116,10 +125,15 @@ static GameKitTurnBasedMatchHelper *sharedHelper = nil;
 -(void)turnBasedMatchmakerViewController:(GKTurnBasedMatchmakerViewController *)viewController
                         didFailWithError:(NSError *)error
 {
-    [self dismissModalViewController];
+//    [self dismissModalViewController];
     NSLog(@"Error finding match: %@", error.localizedDescription);
 }
 
+
+// Called when a users chooses to quit a match and that player has the current turn.  The developer should call
+//  playerQuitInTurnWithOutcome:nextPlayer:matchData:completionHandler: on the match passing in appropriate values.
+//  They can also update matchOutcome for other players as appropriate.
+//
 -(void)turnBasedMatchmakerViewController:(GKTurnBasedMatchmakerViewController *)viewController
                       playerQuitForMatch:(GKTurnBasedMatch *)match
 {
@@ -138,7 +152,7 @@ static GameKitTurnBasedMatchHelper *sharedHelper = nil;
         }
     }
 
-    NSLog(@"playerquitforMatch, %@, %@", match, match.currentParticipant);
+    NSLog(@"playerQuitForMatch, %@, %@", match, match.currentParticipant);
     
     [match participantQuitInTurnWithOutcome:GKTurnBasedMatchOutcomeQuit
                            nextParticipants:nextParticipants
@@ -152,6 +166,7 @@ static GameKitTurnBasedMatchHelper *sharedHelper = nil;
 
 -(void)handleInviteFromGameCenter:(NSArray *)playersToInvite
 {
+    NSLog(@"[GKTBMH] handleInviteFromGameCenter: %@", playersToInvite);
     [self dismissModalViewController];
 
     GKMatchRequest *request = [[GKMatchRequest alloc] init];
@@ -168,39 +183,40 @@ static GameKitTurnBasedMatchHelper *sharedHelper = nil;
 
 -(void)handleTurnEventForMatch:(GKTurnBasedMatch *)match
 {
-    NSLog(@"Turn has happened");
+    NSLog(@"[GKTBMH] handleTurnEventForMatch: %@", match.matchID);
     
-    if ([match.matchID isEqualToString:self.currentMatch.matchID])
+    
+    // TODO: Update old match in match list.
+    
+    [self.matches setValue:match forKey:match.matchID];
+        
+
+    
+    if (self.currentMatch)
     {
-        if ([match.currentParticipant.playerID
-             isEqualToString:[GKLocalPlayer localPlayer].playerID])
+        if ([match.matchID isEqualToString:self.currentMatch.matchID])
         {
-            // it's the current match and it's our turn now
+            // Point at this match.
             self.currentMatch = match;
-            [self.tbDelegate takeTurn:match];
-        }
-        else
-        {
-            // it's the current match, but it's someone else's turn
-            self.currentMatch = match;
-            [self.tbDelegate layoutMatch:match];
+            
+            // You're looking at the match that just received a turn.
+            if ([match.currentParticipant.playerID
+                 isEqualToString:[GKLocalPlayer localPlayer].playerID])
+            {
+                // It's your turn.
+                
+                [self.tbDelegate takeTurn:match];
+            }
+            else
+            {
+                // Not your turn.
+                
+                [self.tbDelegate layoutMatch:match];
+            }
         }
     }
-    else
-    {
-        if ([match.currentParticipant.playerID
-             isEqualToString:[GKLocalPlayer localPlayer].playerID])
-        {
-            // it's not the current match and it's our turn now
-            [self.tbDelegate sendNotice:@"It's your turn for another match"
-                        forMatch:match];
-        }
-        else
-        {
-            // it's the not current match, and it's someone else's
-            // turn
-        }
-    }
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:NOTIF_TURN_EVENT object:nil];
 }
 
 -(void)handleMatchEnded:(GKTurnBasedMatch *)match
@@ -220,7 +236,13 @@ static GameKitTurnBasedMatchHelper *sharedHelper = nil;
 - (void)loadMatches
 {
     [GKTurnBasedMatch loadMatchesWithCompletionHandler:^(NSArray *matches, NSError *error) {
-        self.matches = matches;
+
+        self.matches = [NSMutableDictionary dictionaryWithCapacity:[matches count]];
+
+        for (GKTurnBasedMatch *oneMatch in matches)
+        {
+            [self.matches setValue:oneMatch forKey:oneMatch.matchID];
+        }
         
         if (self.tbDelegate)
         {
@@ -233,8 +255,10 @@ static GameKitTurnBasedMatchHelper *sharedHelper = nil;
 {
     NSMutableArray *ids = [NSMutableArray array];
     
-    for (GKTurnBasedMatch *match in self.matches)
+    for (GKTurnBasedMatch *match in [self.matches allValues])
     {
+        NSLog(@"Caching players in match: %@", match.matchID);
+        
         for (GKTurnBasedParticipant *participant in match.participants)
         {
             if (!participant.playerID)
@@ -256,7 +280,7 @@ static GameKitTurnBasedMatchHelper *sharedHelper = nil;
     [[GameKitTurnBasedMatchHelper sharedInstance] getPlayerInfo:ids delegate:APP_DELEGATE.playerCache];
 }
 
-- (NSString*)matchStatusDisplayName:(GKTurnBasedMatchStatus)status
++ (NSString*)matchStatusDisplayName:(GKTurnBasedMatchStatus)status
 {
     NSString *name = @"";
     

@@ -37,6 +37,14 @@
                                                     <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="stat" lineBreakMode="characterWrap" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsLetterSpacingToFitWidth="YES" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="84" translatesAutoresizingMaskIntoConstraints="NO" id="1eh-tb-Fei">
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="21" id="hhq-a8-5yf"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" name="ChalkboardSE-Regular" family="Chalkboard SE" pointSize="15"/>
+                                                    <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Status" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pyt-VW-a28">
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="189" id="DyA-Kv-cra"/>
@@ -54,13 +62,13 @@
                                                     <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="EEQ-O3-HxB">
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="anonymous-75.png" translatesAutoresizingMaskIntoConstraints="NO" id="EEQ-O3-HxB">
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="30" id="pET-c4-fqb"/>
                                                         <constraint firstAttribute="height" constant="30" id="ucU-sQ-gvP"/>
                                                     </constraints>
                                                 </imageView>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="y8D-mL-4zt">
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="anonymous-75.png" translatesAutoresizingMaskIntoConstraints="NO" id="y8D-mL-4zt">
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="30" id="JpX-zZ-A5t"/>
                                                     </constraints>
@@ -74,6 +82,7 @@
                                             <constraint firstAttribute="bottom" secondItem="EEQ-O3-HxB" secondAttribute="bottom" constant="14" id="GdA-UL-OAE"/>
                                             <constraint firstItem="kRY-Yi-mXo" firstAttribute="leading" secondItem="pyt-VW-a28" secondAttribute="leading" type="default" id="MIJ-oW-VRI"/>
                                             <constraint firstAttribute="trailing" secondItem="y8D-mL-4zt" secondAttribute="trailing" constant="130" id="OH5-wv-IRY"/>
+                                            <constraint firstItem="1eh-tb-Fei" firstAttribute="top" secondItem="M7p-B1-7bW" secondAttribute="top" constant="60" id="RaG-Rg-O7h"/>
                                             <constraint firstItem="0pT-4b-fAt" firstAttribute="top" secondItem="M7p-B1-7bW" secondAttribute="top" constant="37" id="ThA-FO-dGU"/>
                                             <constraint firstAttribute="trailing" secondItem="pyt-VW-a28" secondAttribute="trailing" constant="20" type="default" id="TuW-7w-5ak"/>
                                             <constraint firstItem="EEQ-O3-HxB" firstAttribute="leading" secondItem="kRY-Yi-mXo" secondAttribute="leading" type="default" id="UVm-mo-39h"/>
@@ -82,10 +91,13 @@
                                             <constraint firstItem="0pT-4b-fAt" firstAttribute="leading" secondItem="M7p-B1-7bW" secondAttribute="leading" constant="13" id="eFh-LP-UnZ"/>
                                             <constraint firstItem="y8D-mL-4zt" firstAttribute="top" secondItem="EEQ-O3-HxB" secondAttribute="top" type="default" id="ieg-vz-azA"/>
                                             <constraint firstItem="pyt-VW-a28" firstAttribute="top" secondItem="M7p-B1-7bW" secondAttribute="top" constant="20" type="default" id="lY3-3I-PBP"/>
+                                            <constraint firstItem="1eh-tb-Fei" firstAttribute="leading" secondItem="0pT-4b-fAt" secondAttribute="leading" type="default" id="moF-bx-yi4"/>
+                                            <constraint firstItem="1eh-tb-Fei" firstAttribute="trailing" secondItem="0pT-4b-fAt" secondAttribute="trailing" type="default" id="yai-UG-W33"/>
                                         </constraints>
                                         <size key="customSize" width="320" height="125"/>
                                         <connections>
                                             <outlet property="matchName" destination="0pT-4b-fAt" id="bpV-jr-9Hi"/>
+                                            <outlet property="matchStatus" destination="1eh-tb-Fei" id="ibh-dN-dzn"/>
                                             <outlet property="opponent" destination="kRY-Yi-mXo" id="35Q-qT-gzn"/>
                                             <outlet property="player1Photo" destination="EEQ-O3-HxB" id="fCO-6z-uGN"/>
                                             <outlet property="player2Photo" destination="y8D-mL-4zt" id="tXe-U1-Zvo"/>
@@ -241,6 +253,28 @@
                                     <constraint firstAttribute="width" constant="50" id="YO1-jZ-NdD"/>
                                 </constraints>
                             </imageView>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="status" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ApO-fE-O5Z">
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="21" id="2AD-co-7bn"/>
+                                    <constraint firstAttribute="width" constant="195" id="GLH-oW-TPi"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5Ky-MM-5RO">
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                <state key="normal" title="Play Your Turn">
+                                    <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <state key="highlighted">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="playButtonWasTapped:" destination="Fmv-ZM-x0j" eventType="touchUpInside" id="5vV-XU-0Se"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
@@ -248,20 +282,26 @@
                             <constraint firstItem="mos-qP-G7x" firstAttribute="centerX" secondItem="5jB-t4-Xv5" secondAttribute="centerX" type="default" id="7gf-vH-fV9"/>
                             <constraint firstItem="NHS-Xd-aqA" firstAttribute="top" secondItem="3n6-BO-d8f" secondAttribute="top" constant="20" symbolic="YES" type="default" id="9oq-pk-8cA"/>
                             <constraint firstItem="5jB-t4-Xv5" firstAttribute="top" secondItem="3n6-BO-d8f" secondAttribute="top" constant="76" id="A1C-RW-9FM"/>
+                            <constraint firstItem="ApO-fE-O5Z" firstAttribute="top" secondItem="3n6-BO-d8f" secondAttribute="top" constant="114" id="FBX-TS-clC"/>
                             <constraint firstItem="lAu-zg-IjL" firstAttribute="top" secondItem="3n6-BO-d8f" secondAttribute="top" type="default" id="H4v-7Q-CFZ"/>
                             <constraint firstItem="5jB-t4-Xv5" firstAttribute="leading" secondItem="3n6-BO-d8f" secondAttribute="leading" constant="70" id="IlM-7Q-09u"/>
                             <constraint firstItem="NHS-Xd-aqA" firstAttribute="bottom" secondItem="mos-qP-G7x" secondAttribute="bottom" type="default" id="OtY-cj-Mqd"/>
                             <constraint firstItem="lAu-zg-IjL" firstAttribute="leading" secondItem="3n6-BO-d8f" secondAttribute="leading" type="default" id="Q0f-Zl-OPv"/>
-                            <constraint firstItem="NHS-Xd-aqA" firstAttribute="centerX" secondItem="mWZ-GK-DOc" secondAttribute="centerX" type="default" id="WGE-P8-LjF"/>
+                            <constraint firstItem="5Ky-MM-5RO" firstAttribute="top" secondItem="3n6-BO-d8f" secondAttribute="top" constant="233" id="QLX-qe-0re"/>
                             <constraint firstItem="mos-qP-G7x" firstAttribute="top" secondItem="3n6-BO-d8f" secondAttribute="top" constant="20" symbolic="YES" type="default" id="Xvu-vW-l9s"/>
-                            <constraint firstAttribute="trailing" secondItem="mWZ-GK-DOc" secondAttribute="trailing" constant="57" id="zQc-3E-QQo"/>
+                            <constraint firstItem="ApO-fE-O5Z" firstAttribute="centerX" secondItem="3n6-BO-d8f" secondAttribute="centerX" type="default" id="ea4-ec-Cd5"/>
+                            <constraint firstAttribute="trailing" secondItem="NHS-Xd-aqA" secondAttribute="trailing" constant="63" id="kgc-xr-Hlu"/>
+                            <constraint firstItem="5Ky-MM-5RO" firstAttribute="centerX" secondItem="ApO-fE-O5Z" secondAttribute="centerX" type="default" id="qOT-yi-6r4"/>
+                            <constraint firstAttribute="trailing" secondItem="mWZ-GK-DOc" secondAttribute="trailing" constant="57" id="sTw-it-Jgj"/>
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="playButton" destination="5Ky-MM-5RO" id="uKO-HS-vay"/>
                         <outlet property="player1Label" destination="5jB-t4-Xv5" id="eak-03-3q1"/>
                         <outlet property="player1Photo" destination="mos-qP-G7x" id="djv-ps-vu1"/>
                         <outlet property="player2Label" destination="mWZ-GK-DOc" id="AKW-BP-6CH"/>
                         <outlet property="player2Photo" destination="NHS-Xd-aqA" id="8gt-7i-wfg"/>
+                        <outlet property="statusLabel" destination="ApO-fE-O5Z" id="426-MW-zhy"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="k9h-hR-0Fg" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -271,22 +311,27 @@
     </scenes>
     <resources>
         <image name="Default.png" width="320" height="480"/>
+        <image name="anonymous-75.png" width="75" height="75"/>
     </resources>
     <classes>
         <class className="GameViewController" superclassName="UIViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/GameViewController.h"/>
             <relationships>
                 <relationship kind="action" name="backButtonWasTapped:"/>
+                <relationship kind="action" name="playButtonWasTapped:" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="playButton" candidateClass="UIButton"/>
                 <relationship kind="outlet" name="player1Label" candidateClass="UILabel"/>
                 <relationship kind="outlet" name="player1Photo" candidateClass="UIImageView"/>
                 <relationship kind="outlet" name="player2Label" candidateClass="UILabel"/>
                 <relationship kind="outlet" name="player2Photo" candidateClass="UIImageView"/>
+                <relationship kind="outlet" name="statusLabel" candidateClass="UILabel"/>
             </relationships>
         </class>
         <class className="MatchCell" superclassName="UICollectionViewCell">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/MatchCell.h"/>
             <relationships>
                 <relationship kind="outlet" name="matchName" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="matchStatus" candidateClass="UILabel"/>
                 <relationship kind="outlet" name="opponent" candidateClass="UILabel"/>
                 <relationship kind="outlet" name="player1Photo" candidateClass="UIImageView"/>
                 <relationship kind="outlet" name="player2Photo" candidateClass="UIImageView"/>

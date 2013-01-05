@@ -18,6 +18,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *matchName;
 @property (weak, nonatomic) IBOutlet UIImageView *player1Photo;
 @property (weak, nonatomic) IBOutlet UIImageView *player2Photo;
+@property (weak, nonatomic) IBOutlet UILabel *matchStatus;
 
 
 @end

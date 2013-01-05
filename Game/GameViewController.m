@@ -11,6 +11,11 @@
 #import "AppDelegate.h"
 #import "GameKitTurnBasedMatchHelper.h"
 
+#define READY_STATUS @"It is your turn."
+#define WAITING_STATUS @"Waiting for opponent to play."
+#define SENDING_STATUS @"..."
+#define ERROR_STATUS @"Sorry, please try again."
+
 @interface GameViewController ()
 
 @end
@@ -33,9 +38,32 @@
                                                  name:NOTIF_PLAYER_CACHE_DID_FETCH_PLAYER_PHOTO
                                                object:nil];
     
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(:)
+                                                 name:NOTIF_MATCH_TURN_CHANGED_TO_LOCAL_PLAYER
+                                               object:self.match];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(handleTurn:)
+                                                 name:NOTIF_TURN_EVENT
+                                               object:nil];
+    
     [[GameKitTurnBasedMatchHelper sharedInstance] getPlayerInfo:playerIDs delegate:APP_DELEGATE.playerCache];
  
-    NSLog(@"photos: %@ and %@", self.player1Photo, self.player2Photo);
+    [self updateTurn];
+}
+
+- (void)updateTurn
+{
+    if ([[GKLocalPlayer localPlayer].playerID isEqualToString:self.match.currentParticipant.playerID])
+    {
+        self.statusLabel.text = READY_STATUS;
+        self.playButton.enabled = YES;
+    }
+    else
+    {
+        self.statusLabel.text = WAITING_STATUS;
+        self.playButton.enabled = NO;
+    }
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -54,6 +82,73 @@
     [self dismissViewControllerAnimated:YES completion:^{
         //
     }];
+}
+
+- (IBAction)playButtonWasTapped:(UIButton *)sender
+{
+    sender.enabled = NO;
+    self.statusLabel.text = SENDING_STATUS;
+    
+    
+    GKTurnBasedMatch *currentMatch = self.match;
+    
+    NSData *data = [@"Play" dataUsingEncoding:NSUTF8StringEncoding];
+    
+    NSUInteger currentIndex = [currentMatch.participants indexOfObject:currentMatch.currentParticipant];
+    GKTurnBasedParticipant *nextParticipant;
+    
+    NSMutableArray *nextParticipants = [NSMutableArray array];
+    
+    for (int i = 0; i < [currentMatch.participants count]; i++)
+    {
+        nextParticipant = [currentMatch.participants
+                           objectAtIndex:((currentIndex + 1 + i) %
+                                          [currentMatch.participants count ])];
+        
+        if (nextParticipant.matchOutcome != GKTurnBasedMatchOutcomeQuit)
+        {
+            [nextParticipants addObject:nextParticipant];
+        }
+    }
+
+    if (NO)
+    {
+        // Tie
+        
+        for (GKTurnBasedParticipant *part in currentMatch.participants)
+        {
+            part.matchOutcome = GKTurnBasedMatchOutcomeTied;
+        }
+        
+        [currentMatch endMatchInTurnWithMatchData:data
+                                completionHandler:^(NSError *error) {
+                                    if (error)
+                                    {
+                                        NSLog(@"%@", error);
+                                    }
+                                }];
+    }
+    else
+    {
+        [currentMatch endTurnWithNextParticipants:nextParticipants
+                                      turnTimeout:INT_MAX
+                                        matchData:data
+                                completionHandler:^(NSError *error) {
+                                    if (error)
+                                    {
+                                        NSLog(@"%@", error);
+                                        self.statusLabel.text = ERROR_STATUS;
+                                        self.playButton.enabled = YES;
+                                    }
+                                    else
+                                    {
+                                        self.statusLabel.text = WAITING_STATUS;
+                                    }
+                                }];
+    }
+
+    NSLog(@"Send turn, %@, %@", data, nextParticipant);
+
 }
 
 -(void)playersWereFetched:(NSNotification*)notif
@@ -131,6 +226,25 @@
 
         i++;
     }
+}
+
+-(void)handleTurn:(NSNotification*)notif
+{
+    GKTurnBasedMatch *match = (GKTurnBasedMatch*)[notif.userInfo objectForKey:@"match"];
+    
+    if ([match.matchID isEqualToString:self.match.matchID])
+    {
+        GKPlayer *playerWithTurn = [APP_DELEGATE.playerCache playerWithID:match.currentParticipant.playerID];
+        
+        NSLog(@"[GVC] Received turn event. It is %@'s turn now.", playerWithTurn.alias);
+
+        [self updateTurn];
+    }
+    else
+    {
+        NSLog(@"[GVC] Received turn event for a different match.");
+    }
+    
 }
 
 @end

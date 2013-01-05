@@ -71,7 +71,14 @@
 
 - (UIImage*)photoForPlayer:(GKPlayer*)player
 {
-    return [self.playerPhotos objectForKey:player.playerID];
+    UIImage *img = [self.playerPhotos objectForKey:player.playerID];
+    
+    if (!img)
+    {
+        img = [UIImage imageNamed:@"anonymous-75.png"];
+    }
+    
+    return img;
 }
 
 - (GKPlayer*)player:(NSInteger)playerIndex amongParticipants:(NSArray*)participants
