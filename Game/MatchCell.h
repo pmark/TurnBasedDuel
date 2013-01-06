@@ -11,6 +11,7 @@
 
 @interface MatchCell : UICollectionViewCell
 
+@property (assign, nonatomic) GKTurnBasedMatch *match;
 @property (strong, nonatomic) NSString *player1ID;
 @property (strong, nonatomic) NSString *player2ID;
 @property (weak, nonatomic) IBOutlet UILabel *status;
@@ -20,5 +21,6 @@
 @property (weak, nonatomic) IBOutlet UIImageView *player2Photo;
 @property (weak, nonatomic) IBOutlet UILabel *matchStatus;
 
+- (IBAction)removeButtonWasTapped:(UIButton *)sender;
 
 @end

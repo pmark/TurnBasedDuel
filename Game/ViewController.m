@@ -52,6 +52,9 @@
     [self loadMatches];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadMatches) name:NOTIF_TURN_EVENT object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadMatches) name:NOTIF_MATCH_QUIT_BY_LOCAL_PLAYER object:nil];
+    
 }
 
 - (void)loadMatches
@@ -272,6 +275,7 @@
         NSString *player1ID = ((GKTurnBasedParticipant*)[match.participants objectAtIndex:0]).playerID;
         NSString *player2ID = ((GKTurnBasedParticipant*)[match.participants objectAtIndex:1]).playerID;
         
+        matchCell.match = match;
         matchCell.player1ID = player1ID;
         matchCell.player2ID = player2ID;
         matchCell.matchName.text = match.matchID;
@@ -285,10 +289,48 @@
         {
             opponentPlayer = [APP_DELEGATE.playerCache playerWithID:player1ID];
         }
-
+        
         if (opponentPlayer)
         {
-            matchCell.opponent.text = opponentPlayer.alias;
+            NSString *msg = nil;
+            for (GKTurnBasedParticipant *participant in match.participants)
+            {
+                NSLog(@"[VC] participant %@ matchOutcome: %i", [APP_DELEGATE.playerCache playerWithID:participant.playerID].alias, participant.matchOutcome);
+
+                if (participant.matchOutcome != GKTurnBasedMatchOutcomeNone)
+                {
+                    if ([participant.playerID isEqualToString:[GKLocalPlayer localPlayer].playerID])
+                    {
+                        switch (participant.matchOutcome)
+                        {
+                            case GKTurnBasedMatchOutcomeWon:
+                                msg = [NSString stringWithFormat:@"You beat %@", opponentPlayer.alias];
+                                break;
+                                
+                            case GKTurnBasedMatchOutcomeLost:
+                                msg = [NSString stringWithFormat:@"You lost to %@", opponentPlayer.alias];
+                                break;
+                                
+                            case GKTurnBasedMatchOutcomeQuit:
+                                msg = [NSString stringWithFormat:@"You forfeited to %@", opponentPlayer.alias];
+                                break;
+                                
+                            default:
+                                break;
+                        }
+                    }
+                }
+            }
+            
+            if (msg)
+            {
+                matchCell.opponent.text = msg;
+            }
+            else
+            {
+                matchCell.opponent.text = opponentPlayer.alias;
+            }
+
         }
         else
         {
@@ -297,21 +339,35 @@
         
         // If local player is the currentParticipant then it's my turn.
         
-        if ([match.currentParticipant.playerID isEqualToString:[GKLocalPlayer localPlayer].playerID])
+        if (match.status == GKTurnBasedMatchStatusOpen)
         {
-            matchCell.status.text = @"Your Turn";
-            matchCell.status.textColor = [UIColor blackColor];
+            if ([match.currentParticipant.playerID isEqualToString:[GKLocalPlayer localPlayer].playerID])
+            {
+                matchCell.status.text = @"Your Turn";
+                matchCell.status.textColor = [UIColor darkGrayColor];
+            }
+            else
+            {
+                matchCell.status.text = @"Waiting For Turn";
+                matchCell.status.textColor = [UIColor lightGrayColor];
+            }
         }
-        else
+        else if (match.status == GKTurnBasedMatchStatusEnded)
         {
-            matchCell.status.text = @"Waiting For Turn";
+            matchCell.status.text = @"Game Over";
+            matchCell.status.textColor = [UIColor darkGrayColor];
+        }
+        else if (match.status == GKTurnBasedMatchStatusMatching)
+        {
+            matchCell.status.text = @"Finding Opponent";
             matchCell.status.textColor = [UIColor lightGrayColor];
         }
         
         matchCell.player1Photo.image = [APP_DELEGATE.playerCache photoForPlayer:player1];
         matchCell.player2Photo.image = [APP_DELEGATE.playerCache photoForPlayer:player2];
         
-        matchCell.matchStatus.text = [GameKitTurnBasedMatchHelper matchStatusDisplayName:match.status];
+//        matchCell.matchStatus.text = [GameKitTurnBasedMatchHelper matchStatusDisplayName:match.status];
+        matchCell.matchStatus.text = @"";
         
         cell = matchCell;
         

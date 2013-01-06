@@ -26,11 +26,7 @@
 {
     [super viewDidLoad];
 
-    GKTurnBasedParticipant *participant1 = (GKTurnBasedParticipant *)[self.match.participants objectAtIndex:0];
-    GKTurnBasedParticipant *participant2 = (GKTurnBasedParticipant *)[self.match.participants objectAtIndex:1];
-    NSArray *playerIDs = [NSArray arrayWithObjects:participant1.playerID, participant2.playerID, nil];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(playersWereFetched:)
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updatePlayerInfo)
                                                  name:NOTIF_PLAYER_CACHE_DID_FETCH_PLAYERS
                                                object:nil];
 
@@ -52,7 +48,13 @@
                                                  name:NOTIF_MATCH_WON_BY_LOCAL_PLAYER
                                                object:nil];
     
-    [[GameKitTurnBasedMatchHelper sharedInstance] getPlayerInfo:playerIDs delegate:APP_DELEGATE.playerCache];
+    //    GKTurnBasedParticipant *participant1 = (GKTurnBasedParticipant *)[self.match.participants objectAtIndex:0];
+    //    GKTurnBasedParticipant *participant2 = (GKTurnBasedParticipant *)[self.match.participants objectAtIndex:1];
+    //    NSArray *playerIDs = [NSArray arrayWithObjects:participant1.playerID, participant2.playerID, nil];
+    
+    //    [[GameKitTurnBasedMatchHelper sharedInstance] getPlayerInfo:playerIDs delegate:APP_DELEGATE.playerCache];
+    
+    [self updatePlayerInfo];
  
     [self updateTurn];
 }
@@ -173,7 +175,7 @@
 {
     // TODO: Be busy.
 
-    [self endGame];
+    [self bowOut];
 }
 
 - (void)endGame
@@ -183,7 +185,7 @@
     if ([self.match.currentParticipant.playerID isEqualToString:localPlayerID])
     {
         // I quit on my turn.
-                
+        
         for (GKTurnBasedParticipant *participant in self.match.participants)
         {
             if (participant.matchOutcome != GKTurnBasedMatchOutcomeQuit)
@@ -199,6 +201,8 @@
                     participant.matchOutcome = GKTurnBasedMatchOutcomeWon;
                 }
             }
+            
+            NSLog(@"[GVC] endGame participant %@ matchOutcome: %i", [APP_DELEGATE.playerCache playerWithID:participant.playerID].alias, participant.matchOutcome);
         }
         
         [self.match endMatchInTurnWithMatchData:self.match.matchData
@@ -211,19 +215,20 @@
                                   else
                                   {
                                       NSLog(@"[GVC] endGame endMatchInTurnWithMatchData completed.");
-
-                                      // Send notification.
-                                      
-                                      NSDictionary *userInfo = [NSDictionary dictionaryWithObjectsAndKeys:
-                                                                self.match, @"match",
-                                                                nil];
-                                      
-                                      [[NSNotificationCenter defaultCenter] postNotificationName:NOTIF_MATCH_QUIT_BY_LOCAL_PLAYER
-                                                                                          object:nil
-                                                                                        userInfo:userInfo];
-                                      
-                                      [self performSelectorOnMainThread:@selector(dismiss) withObject:nil waitUntilDone:NO];
                                   }
+                                  
+                                  // Send notification.
+                                  
+                                  NSDictionary *userInfo = [NSDictionary dictionaryWithObjectsAndKeys:
+                                                            self.match, @"match",
+                                                            nil];
+                                  
+                                  [[NSNotificationCenter defaultCenter] postNotificationName:NOTIF_MATCH_QUIT_BY_LOCAL_PLAYER
+                                                                                      object:nil
+                                                                                    userInfo:userInfo];
+                                  
+                                  [self performSelectorOnMainThread:@selector(dismiss) withObject:nil waitUntilDone:NO];
+
                               }];
     }
     else
@@ -281,11 +286,11 @@
                                    completionHandler:^(NSError *error) {
                                        if (error)
                                        {
-                                           NSLog(@"[GVC] resignButtonWasTapped during my turn error: %@", error.localizedDescription);
+                                           NSLog(@"[GVC] bowOut during my turn error: %@", error.localizedDescription);
                                        }
                                        else
                                        {
-                                           NSLog(@"[GVC] resignButtonWasTapped during my turn completed.");
+                                           NSLog(@"[GVC] bowOut during my turn completed.");
                                        }
 
                                        [self performSelectorOnMainThread:@selector(dismiss) withObject:nil waitUntilDone:NO];
@@ -298,11 +303,11 @@
                                   withCompletionHandler:^(NSError *error) {
                                       if (error)
                                       {
-                                          NSLog(@"[GVC] resignButtonWasTapped out of turn error: %@", error.localizedDescription);
+                                          NSLog(@"[GVC] bowOut out of turn error: %@", error.localizedDescription);
                                       }
                                       else
                                       {
-                                          NSLog(@"[GVC] resignButtonWasTapped out of turn completed.");
+                                          NSLog(@"[GVC] bowOut out of turn completed.");
                                       }
                                       
                                       [self performSelectorOnMainThread:@selector(dismiss) withObject:nil waitUntilDone:NO];
@@ -316,7 +321,7 @@
     
 }
 
--(void)playersWereFetched:(NSNotification*)notif
+-(void)updatePlayerInfo
 {
     GKTurnBasedParticipant *participant1 = (GKTurnBasedParticipant *)[self.match.participants objectAtIndex:0];
     GKPlayer *player1 = [APP_DELEGATE.playerCache playerWithID:participant1.playerID];
@@ -405,6 +410,9 @@
         GKPlayer *playerWithTurn = [APP_DELEGATE.playerCache playerWithID:match.currentParticipant.playerID];
         
         NSLog(@"[GVC] Received turn event. It is %@'s turn now.", playerWithTurn.alias);
+
+        
+        [self updatePlayerInfo];
 
         [self updateTurn];
     }

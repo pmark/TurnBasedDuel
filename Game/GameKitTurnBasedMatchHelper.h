@@ -14,6 +14,7 @@
 #define NOTIF_NEW_GAME @"NOTIF_NEW_GAME"
 #define NOTIF_MATCH_QUIT_BY_LOCAL_PLAYER @"NOTIF_MATCH_QUIT_BY_LOCAL_PLAYER"
 #define NOTIF_MATCH_WON_BY_LOCAL_PLAYER @"NOTIF_MATCH_WON_BY_LOCAL_PLAYER"
+#define NOTIF_MATCH_REMOVED @"NOTIF_MATCH_REMOVED"
 
 @protocol GameKitTurnBasedMatchHelperDelegate
 - (void)enterNewGame:(GKTurnBasedMatch *)match;
@@ -26,7 +27,7 @@
 @end
 
 
-@interface GameKitTurnBasedMatchHelper : GameKitHelper <GKTurnBasedMatchmakerViewControllerDelegate, GKTurnBasedEventHandlerDelegate,GKFriendRequestComposeViewControllerDelegate>
+@interface GameKitTurnBasedMatchHelper : GameKitHelper <GKTurnBasedMatchmakerViewControllerDelegate, GKTurnBasedEventHandlerDelegate,GKFriendRequestComposeViewControllerDelegate, GKTurnBasedEventHandlerDelegate>
 {
 }
 

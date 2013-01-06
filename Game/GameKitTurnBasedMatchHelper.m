@@ -163,11 +163,11 @@ static GameKitTurnBasedMatchHelper *sharedHelper = nil;
                          completionHandler:^(NSError *error) {
                              if (error)
                              {
-                                 NSLog(@"[GKTBMH] endMatchInTurnWithMatchData completed.");
+                                 NSLog(@"[GKTBMH] endMatchInTurnWithMatchData error: %@", error.localizedDescription);
                              }
                              else
                              {
-                                 NSLog(@"[GKTBMH] endMatchInTurnWithMatchData error: %@", error.localizedDescription);
+                                 NSLog(@"[GKTBMH] endMatchInTurnWithMatchData completed.");
                              }
                          }];
     }
@@ -180,11 +180,11 @@ static GameKitTurnBasedMatchHelper *sharedHelper = nil;
                               completionHandler:^(NSError *error) {
                                   if (error)
                                   {
-                                      NSLog(@"[GKTBMH] participantQuitInTurnWithOutcome completed.");
+                                      NSLog(@"[GKTBMH] participantQuitInTurnWithOutcome error: %@", error.localizedDescription);
                                   }
                                   else
                                   {
-                                      NSLog(@"[GKTBMH] participantQuitInTurnWithOutcome error: %@", error.localizedDescription);
+                                      NSLog(@"[GKTBMH] participantQuitInTurnWithOutcome completed.");
                                   }
                               }];
     }
@@ -229,9 +229,13 @@ static GameKitTurnBasedMatchHelper *sharedHelper = nil;
     
     for (GKTurnBasedParticipant *participant in match.participants)
     {
+        NSLog(@"[GKTBMH] handleTurnEventForMatch %@ status: %i", [APP_DELEGATE.playerCache playerWithID:participant.playerID].alias, participant.matchOutcome);
+
         if ([participant.playerID isEqualToString:localPlayerID])
         {
             myParticipant = participant;
+            
+            
         }
         else if (participant.matchOutcome == GKTurnBasedMatchOutcomeNone)
         {

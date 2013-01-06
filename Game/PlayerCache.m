@@ -27,6 +27,9 @@
 
 - (void)onPlayerInfoReceived:(NSArray*)players
 {
+    if ([players count] == 0)
+        return;
+    
     // Update the cache.
     
     for (GKPlayer *onePlayer in players)

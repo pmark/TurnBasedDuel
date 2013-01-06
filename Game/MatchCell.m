@@ -80,8 +80,8 @@
 
 - (void)playerWasFetched:(NSNotification*)notif
 {
-    if ([self.opponent.text length] > 0)
-        return;
+//    if ([self.opponent.text length] > 0)
+//        return;
     
     // Set opponent name.
     
@@ -102,6 +102,33 @@
         }
     }
 
+}
+
+- (IBAction)removeButtonWasTapped:(UIButton *)sender
+{
+    // TODO: Make a utility function for quitting a match.
+    // TODO: Use the match quit function if this match is active, then remove the match after quitting.
+    
+    
+    [self.match removeWithCompletionHandler:^(NSError *error) {
+        
+        if (error)
+        {
+            NSLog(@"[MC] remove error: %@", error.localizedDescription);
+        }
+        else
+        {
+            NSLog(@"[MC] removed.");
+        }
+        
+        NSDictionary *userInfo = [NSDictionary dictionaryWithObjectsAndKeys:
+                                  self.match, @"match",
+                                  nil];
+        
+        [[NSNotificationCenter defaultCenter] postNotificationName:NOTIF_MATCH_REMOVED
+                                                            object:nil
+                                                          userInfo:userInfo];
+    }];
 }
 
 @end

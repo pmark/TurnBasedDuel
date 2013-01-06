@@ -37,14 +37,6 @@
                                                     <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="stat" lineBreakMode="characterWrap" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsLetterSpacingToFitWidth="YES" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="84" translatesAutoresizingMaskIntoConstraints="NO" id="1eh-tb-Fei">
-                                                    <constraints>
-                                                        <constraint firstAttribute="height" constant="21" id="hhq-a8-5yf"/>
-                                                    </constraints>
-                                                    <fontDescription key="fontDescription" name="ChalkboardSE-Regular" family="Chalkboard SE" pointSize="15"/>
-                                                    <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Status" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pyt-VW-a28">
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="189" id="DyA-Kv-cra"/>
@@ -54,9 +46,9 @@
                                                     <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Opponent" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kRY-Yi-mXo">
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Opponent" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="8" adjustsLetterSpacingToFitWidth="YES" translatesAutoresizingMaskIntoConstraints="NO" id="kRY-Yi-mXo">
                                                     <constraints>
-                                                        <constraint firstAttribute="height" constant="21" id="9F1-J8-4kq"/>
+                                                        <constraint firstAttribute="height" constant="21" id="enx-7A-nC6"/>
                                                     </constraints>
                                                     <fontDescription key="fontDescription" name="ChalkboardSE-Regular" family="Chalkboard SE" pointSize="15"/>
                                                     <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
@@ -65,7 +57,6 @@
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="anonymous-75.png" translatesAutoresizingMaskIntoConstraints="NO" id="EEQ-O3-HxB">
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="30" id="pET-c4-fqb"/>
-                                                        <constraint firstAttribute="height" constant="30" id="ucU-sQ-gvP"/>
                                                     </constraints>
                                                 </imageView>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="anonymous-75.png" translatesAutoresizingMaskIntoConstraints="NO" id="y8D-mL-4zt">
@@ -73,31 +64,46 @@
                                                         <constraint firstAttribute="width" constant="30" id="JpX-zZ-A5t"/>
                                                     </constraints>
                                                 </imageView>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mIe-Ds-Qoq">
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="30" id="JyM-w8-X1v"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                                    <state key="normal" title="X">
+                                                        <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
+                                                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                                    </state>
+                                                    <state key="highlighted">
+                                                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                    </state>
+                                                    <connections>
+                                                        <action selector="removeButtonWasTapped:" destination="M7p-B1-7bW" eventType="touchUpInside" id="9Xc-Es-VZJ"/>
+                                                    </connections>
+                                                </button>
                                             </subviews>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         </view>
                                         <color key="backgroundColor" name="alternateSelectedControlTextColor" catalog="System" colorSpace="catalog"/>
                                         <constraints>
-                                            <constraint firstAttribute="trailing" secondItem="kRY-Yi-mXo" secondAttribute="trailing" constant="20" type="default" id="2Vb-o5-IxK"/>
-                                            <constraint firstAttribute="bottom" secondItem="EEQ-O3-HxB" secondAttribute="bottom" constant="14" id="GdA-UL-OAE"/>
+                                            <constraint firstAttribute="trailing" secondItem="kRY-Yi-mXo" secondAttribute="trailing" constant="20" type="default" id="AOa-Fe-i12"/>
+                                            <constraint firstItem="mIe-Ds-Qoq" firstAttribute="centerX" secondItem="0pT-4b-fAt" secondAttribute="centerX" type="default" id="BIS-Uy-W4p"/>
+                                            <constraint firstAttribute="trailing" secondItem="pyt-VW-a28" secondAttribute="trailing" constant="20" type="default" id="IPm-7e-bPS"/>
                                             <constraint firstItem="kRY-Yi-mXo" firstAttribute="leading" secondItem="pyt-VW-a28" secondAttribute="leading" type="default" id="MIJ-oW-VRI"/>
                                             <constraint firstAttribute="trailing" secondItem="y8D-mL-4zt" secondAttribute="trailing" constant="130" id="OH5-wv-IRY"/>
-                                            <constraint firstItem="1eh-tb-Fei" firstAttribute="top" secondItem="M7p-B1-7bW" secondAttribute="top" constant="60" id="RaG-Rg-O7h"/>
+                                            <constraint firstItem="pyt-VW-a28" firstAttribute="top" secondItem="M7p-B1-7bW" secondAttribute="top" constant="20" type="default" id="Th4-Fk-NUs"/>
                                             <constraint firstItem="0pT-4b-fAt" firstAttribute="top" secondItem="M7p-B1-7bW" secondAttribute="top" constant="37" id="ThA-FO-dGU"/>
-                                            <constraint firstAttribute="trailing" secondItem="pyt-VW-a28" secondAttribute="trailing" constant="20" type="default" id="TuW-7w-5ak"/>
                                             <constraint firstItem="EEQ-O3-HxB" firstAttribute="leading" secondItem="kRY-Yi-mXo" secondAttribute="leading" type="default" id="UVm-mo-39h"/>
+                                            <constraint firstItem="mIe-Ds-Qoq" firstAttribute="bottom" secondItem="EEQ-O3-HxB" secondAttribute="bottom" type="default" id="WaK-6K-Hbu"/>
                                             <constraint firstItem="kRY-Yi-mXo" firstAttribute="top" secondItem="M7p-B1-7bW" secondAttribute="top" constant="48" id="Zcc-xw-gUK"/>
+                                            <constraint firstAttribute="bottom" secondItem="mIe-Ds-Qoq" secondAttribute="bottom" constant="14" id="c1Q-EZ-wtL"/>
                                             <constraint firstItem="y8D-mL-4zt" firstAttribute="bottom" secondItem="EEQ-O3-HxB" secondAttribute="bottom" type="default" id="d4l-1a-fYb"/>
                                             <constraint firstItem="0pT-4b-fAt" firstAttribute="leading" secondItem="M7p-B1-7bW" secondAttribute="leading" constant="13" id="eFh-LP-UnZ"/>
                                             <constraint firstItem="y8D-mL-4zt" firstAttribute="top" secondItem="EEQ-O3-HxB" secondAttribute="top" type="default" id="ieg-vz-azA"/>
-                                            <constraint firstItem="pyt-VW-a28" firstAttribute="top" secondItem="M7p-B1-7bW" secondAttribute="top" constant="20" type="default" id="lY3-3I-PBP"/>
-                                            <constraint firstItem="1eh-tb-Fei" firstAttribute="leading" secondItem="0pT-4b-fAt" secondAttribute="leading" type="default" id="moF-bx-yi4"/>
-                                            <constraint firstItem="1eh-tb-Fei" firstAttribute="trailing" secondItem="0pT-4b-fAt" secondAttribute="trailing" type="default" id="yai-UG-W33"/>
+                                            <constraint firstItem="EEQ-O3-HxB" firstAttribute="top" secondItem="mIe-Ds-Qoq" secondAttribute="top" type="default" id="wqb-l8-EeI"/>
                                         </constraints>
                                         <size key="customSize" width="320" height="125"/>
                                         <connections>
                                             <outlet property="matchName" destination="0pT-4b-fAt" id="bpV-jr-9Hi"/>
-                                            <outlet property="matchStatus" destination="1eh-tb-Fei" id="ibh-dN-dzn"/>
                                             <outlet property="opponent" destination="kRY-Yi-mXo" id="35Q-qT-gzn"/>
                                             <outlet property="player1Photo" destination="EEQ-O3-HxB" id="fCO-6z-uGN"/>
                                             <outlet property="player2Photo" destination="y8D-mL-4zt" id="tXe-U1-Zvo"/>
@@ -346,6 +352,7 @@
         <class className="MatchCell" superclassName="UICollectionViewCell">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/MatchCell.h"/>
             <relationships>
+                <relationship kind="action" name="removeButtonWasTapped:" candidateClass="UIButton"/>
                 <relationship kind="outlet" name="matchName" candidateClass="UILabel"/>
                 <relationship kind="outlet" name="matchStatus" candidateClass="UILabel"/>
                 <relationship kind="outlet" name="opponent" candidateClass="UILabel"/>
