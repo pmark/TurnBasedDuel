@@ -21,5 +21,6 @@
 
 - (IBAction)backButtonWasTapped:(id)sender;
 - (IBAction)playButtonWasTapped:(UIButton *)sender;
+- (IBAction)resignButtonWasTapped:(id)sender;
 
 @end

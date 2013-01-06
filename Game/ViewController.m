@@ -70,6 +70,18 @@
     [self loadMatches];
 }
 
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    
+    GKTurnBasedMatch *matchToLoad = [GameKitTurnBasedMatchHelper sharedInstance].currentMatch;
+
+    if (matchToLoad)
+    {
+        [self performSegueWithIdentifier:@"GameSegue" sender:nil];
+    }
+}
+
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
@@ -120,14 +132,14 @@
 {
     NSLog(@"Taking turn for existing game...");
 
-    int playerNum = [match.participants
-                     indexOfObject:match.currentParticipant] + 1;
+//    int playerNum = [match.participants indexOfObject:match.currentParticipant] + 1;    
+//    NSString *statusString = [NSString stringWithFormat:@"Player %d's Turn (that's you)", playerNum];
+//    NSLog(@"takeTurn: %@", statusString);
+//    [self checkForEnding:match.matchData];
     
-    NSString *statusString = [NSString stringWithFormat:@"Player %d's Turn (that's you)", playerNum];
+    [[GameKitTurnBasedMatchHelper sharedInstance] cachePlayerData];
+    [GameKitTurnBasedMatchHelper sharedInstance].currentMatch = match;
     
-    NSLog(@"takeTurn: %@", statusString);
-    
-    [self checkForEnding:match.matchData];
 }
 
 -(void)sendNotice:(NSString *)notice forMatch:(GKTurnBasedMatch *)match

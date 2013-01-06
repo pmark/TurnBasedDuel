@@ -275,6 +275,19 @@
                                     <action selector="playButtonWasTapped:" destination="Fmv-ZM-x0j" eventType="touchUpInside" id="5vV-XU-0Se"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tFH-Kx-x2i">
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                <state key="normal" title="Resign Game">
+                                    <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <state key="highlighted">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="resignButtonWasTapped:" destination="Fmv-ZM-x0j" eventType="touchUpInside" id="zTJ-9y-ngN"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
@@ -288,11 +301,13 @@
                             <constraint firstItem="NHS-Xd-aqA" firstAttribute="bottom" secondItem="mos-qP-G7x" secondAttribute="bottom" type="default" id="OtY-cj-Mqd"/>
                             <constraint firstItem="lAu-zg-IjL" firstAttribute="leading" secondItem="3n6-BO-d8f" secondAttribute="leading" type="default" id="Q0f-Zl-OPv"/>
                             <constraint firstItem="5Ky-MM-5RO" firstAttribute="top" secondItem="3n6-BO-d8f" secondAttribute="top" constant="233" id="QLX-qe-0re"/>
+                            <constraint firstItem="tFH-Kx-x2i" firstAttribute="centerX" secondItem="3n6-BO-d8f" secondAttribute="centerX" type="default" id="Qgb-dr-bBv"/>
                             <constraint firstItem="mos-qP-G7x" firstAttribute="top" secondItem="3n6-BO-d8f" secondAttribute="top" constant="20" symbolic="YES" type="default" id="Xvu-vW-l9s"/>
-                            <constraint firstItem="ApO-fE-O5Z" firstAttribute="centerX" secondItem="3n6-BO-d8f" secondAttribute="centerX" type="default" id="ea4-ec-Cd5"/>
                             <constraint firstAttribute="trailing" secondItem="NHS-Xd-aqA" secondAttribute="trailing" constant="63" id="kgc-xr-Hlu"/>
+                            <constraint firstItem="tFH-Kx-x2i" firstAttribute="top" secondItem="5Ky-MM-5RO" secondAttribute="bottom" constant="8" symbolic="YES" type="default" id="n6N-TX-1CU"/>
                             <constraint firstItem="5Ky-MM-5RO" firstAttribute="centerX" secondItem="ApO-fE-O5Z" secondAttribute="centerX" type="default" id="qOT-yi-6r4"/>
                             <constraint firstAttribute="trailing" secondItem="mWZ-GK-DOc" secondAttribute="trailing" constant="57" id="sTw-it-Jgj"/>
+                            <constraint firstItem="tFH-Kx-x2i" firstAttribute="centerX" secondItem="5Ky-MM-5RO" secondAttribute="centerX" type="default" id="zwY-Zm-TuV"/>
                         </constraints>
                     </view>
                     <connections>
@@ -319,6 +334,7 @@
             <relationships>
                 <relationship kind="action" name="backButtonWasTapped:"/>
                 <relationship kind="action" name="playButtonWasTapped:" candidateClass="UIButton"/>
+                <relationship kind="action" name="resignButtonWasTapped:"/>
                 <relationship kind="outlet" name="playButton" candidateClass="UIButton"/>
                 <relationship kind="outlet" name="player1Label" candidateClass="UILabel"/>
                 <relationship kind="outlet" name="player1Photo" candidateClass="UIImageView"/>
@@ -349,6 +365,9 @@
         </class>
         <class className="UICollectionViewFlowLayout" superclassName="UICollectionViewLayout">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/UICollectionViewFlowLayout.h"/>
+        </class>
+        <class className="UICollectionViewLayout" superclassName="NSObject">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/UICollectionViewLayout.h"/>
         </class>
         <class className="ViewController" superclassName="UIViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/ViewController.h"/>

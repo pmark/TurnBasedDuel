@@ -82,31 +82,31 @@
 // The user has cancelled matchmaking
 - (void)matchmakerViewControllerWasCancelled:(GKMatchmakerViewController *)viewController
 {
-    
+    NSLog(@"[GKH] matchmakerViewControllerWasCancelled");
 }
 
 // Matchmaking has failed with an error
 - (void)matchmakerViewController:(GKMatchmakerViewController *)viewController didFailWithError:(NSError *)error
 {
-    
+    NSLog(@"[GKH] didFailWithError: %@", error.localizedDescription);
 }
 
 // A peer-to-peer match has been found, the game should start
 - (void)matchmakerViewController:(GKMatchmakerViewController *)viewController didFindMatch:(GKMatch *)match
 {
-    
+    NSLog(@"[GKH] didFindMatch");
 }
 
 // Players have been found for a server-hosted game, the game should start
 - (void)matchmakerViewController:(GKMatchmakerViewController *)viewController didFindPlayers:(NSArray *)playerIDs
 {
-    
+    NSLog(@"[GKH] didFindPlayers: %@", playerIDs);
 }
 
 // An invited player has accepted a hosted invite.  Apps should connect through the hosting server and then update the player's connected state (using setConnected:forHostedPlayer:)
 - (void)matchmakerViewController:(GKMatchmakerViewController *)viewController didReceiveAcceptFromHostedPlayer:(NSString *)playerID
 {
-    
+    NSLog(@"[GKH] didReceiveAcceptFromHostedPlayer: %@", playerID);    
 }
 
 

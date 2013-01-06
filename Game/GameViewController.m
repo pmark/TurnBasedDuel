@@ -47,6 +47,11 @@
                                                  name:NOTIF_TURN_EVENT
                                                object:nil];
     
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(localPlayerWon:)
+                                                 name:NOTIF_MATCH_WON_BY_LOCAL_PLAYER
+                                               object:nil];
+    
     [[GameKitTurnBasedMatchHelper sharedInstance] getPlayerInfo:playerIDs delegate:APP_DELEGATE.playerCache];
  
     [self updateTurn];
@@ -69,6 +74,12 @@
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    [GameKitTurnBasedMatchHelper sharedInstance].currentMatch = nil;
 }
 
 - (void)didReceiveMemoryWarning
@@ -149,6 +160,160 @@
 
     NSLog(@"Send turn, %@, %@", data, nextParticipant);
 
+}
+
+- (void)dismiss
+{
+    [self dismissViewControllerAnimated:YES completion:^{
+        // ???
+    }];
+}
+
+- (IBAction)resignButtonWasTapped:(id)sender
+{
+    // TODO: Be busy.
+
+    [self endGame];
+}
+
+- (void)endGame
+{
+    NSString *localPlayerID = [GKLocalPlayer localPlayer].playerID;
+    
+    if ([self.match.currentParticipant.playerID isEqualToString:localPlayerID])
+    {
+        // I quit on my turn.
+                
+        for (GKTurnBasedParticipant *participant in self.match.participants)
+        {
+            if (participant.matchOutcome != GKTurnBasedMatchOutcomeQuit)
+            {
+                if ([participant.playerID isEqualToString:localPlayerID])
+                {
+                    // It's me.
+                    participant.matchOutcome = GKTurnBasedMatchOutcomeQuit;
+                }
+                else
+                {
+                    // Opponent wins.
+                    participant.matchOutcome = GKTurnBasedMatchOutcomeWon;
+                }
+            }
+        }
+        
+        [self.match endMatchInTurnWithMatchData:self.match.matchData
+                              completionHandler:^(NSError *error) {
+                                  
+                                  if (error)
+                                  {
+                                      NSLog(@"[GVC] endGame endMatchInTurnWithMatchData error: %@", error.localizedDescription);
+                                  }
+                                  else
+                                  {
+                                      NSLog(@"[GVC] endGame endMatchInTurnWithMatchData completed.");
+
+                                      // Send notification.
+                                      
+                                      NSDictionary *userInfo = [NSDictionary dictionaryWithObjectsAndKeys:
+                                                                self.match, @"match",
+                                                                nil];
+                                      
+                                      [[NSNotificationCenter defaultCenter] postNotificationName:NOTIF_MATCH_QUIT_BY_LOCAL_PLAYER
+                                                                                          object:nil
+                                                                                        userInfo:userInfo];
+                                      
+                                      [self performSelectorOnMainThread:@selector(dismiss) withObject:nil waitUntilDone:NO];
+                                  }
+                              }];
+    }
+    else
+    {
+        // It's not my turn.
+        
+        [self.match participantQuitOutOfTurnWithOutcome:GKTurnBasedMatchOutcomeQuit
+                                  withCompletionHandler:^(NSError *error) {
+                                      if (error)
+                                      {
+                                          NSLog(@"[GVC] endGame out of turn error: %@", error.localizedDescription);
+                                      }
+                                      else
+                                      {
+                                          NSLog(@"[GVC] endGame out of turn completed.");
+                                      }
+                                      
+                                      [self performSelectorOnMainThread:@selector(dismiss) withObject:nil waitUntilDone:NO];
+                                  }];
+    }
+
+}
+
+//
+// Use this for matches that involve more than 2 players.
+//
+- (void)bowOut
+{
+    NSString *localPlayerID = [GKLocalPlayer localPlayer].playerID;
+    NSMutableArray *nextParticipants = [NSMutableArray array];
+    
+    if ([self.match.currentParticipant.playerID isEqualToString:localPlayerID])
+    {
+        // I quit.
+        
+        NSUInteger currentIndex = [self.match.participants indexOfObject:self.match.currentParticipant];
+        GKTurnBasedParticipant *participant;
+        
+        for (int i = 0; i < [self.match.participants count]; i++)
+        {
+            participant = [self.match.participants objectAtIndex:(currentIndex + 1 + i) %
+                           self.match.participants.count];
+            
+            if (participant.matchOutcome != GKTurnBasedMatchOutcomeQuit &&
+                ![participant.playerID isEqualToString:localPlayerID])
+            {
+                [nextParticipants addObject:participant];
+            }
+        }
+        
+        [self.match participantQuitInTurnWithOutcome:GKTurnBasedMatchOutcomeQuit
+                                    nextParticipants:nextParticipants
+                                         turnTimeout:INT_MAX
+                                           matchData:self.match.matchData
+                                   completionHandler:^(NSError *error) {
+                                       if (error)
+                                       {
+                                           NSLog(@"[GVC] resignButtonWasTapped during my turn error: %@", error.localizedDescription);
+                                       }
+                                       else
+                                       {
+                                           NSLog(@"[GVC] resignButtonWasTapped during my turn completed.");
+                                       }
+
+                                       [self performSelectorOnMainThread:@selector(dismiss) withObject:nil waitUntilDone:NO];
+                                   }];
+    }
+    
+    if ([nextParticipants count] == 0)
+    {
+        [self.match participantQuitOutOfTurnWithOutcome:GKTurnBasedMatchOutcomeQuit
+                                  withCompletionHandler:^(NSError *error) {
+                                      if (error)
+                                      {
+                                          NSLog(@"[GVC] resignButtonWasTapped out of turn error: %@", error.localizedDescription);
+                                      }
+                                      else
+                                      {
+                                          NSLog(@"[GVC] resignButtonWasTapped out of turn completed.");
+                                      }
+                                      
+                                      [self performSelectorOnMainThread:@selector(dismiss) withObject:nil waitUntilDone:NO];
+                                  }];
+    }
+}
+
+-(void)localPlayerWon:(NSNotification*)notif
+{
+    NSLog(@"localPlayerWon");
+    
 }
 
 -(void)playersWereFetched:(NSNotification*)notif
@@ -232,8 +397,11 @@
 {
     GKTurnBasedMatch *match = (GKTurnBasedMatch*)[notif.userInfo objectForKey:@"match"];
     
+    NSLog(@"[GVC] handleTurn: Notified match is %@ and the current game's match is %@", match.matchID, self.match.matchID);
+    
     if ([match.matchID isEqualToString:self.match.matchID])
     {
+        self.match = match;
         GKPlayer *playerWithTurn = [APP_DELEGATE.playerCache playerWithID:match.currentParticipant.playerID];
         
         NSLog(@"[GVC] Received turn event. It is %@'s turn now.", playerWithTurn.alias);

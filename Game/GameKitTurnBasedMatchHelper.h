@@ -12,6 +12,8 @@
 
 #define NOTIF_TURN_EVENT @"NOTIF_TURN_EVENT"
 #define NOTIF_NEW_GAME @"NOTIF_NEW_GAME"
+#define NOTIF_MATCH_QUIT_BY_LOCAL_PLAYER @"NOTIF_MATCH_QUIT_BY_LOCAL_PLAYER"
+#define NOTIF_MATCH_WON_BY_LOCAL_PLAYER @"NOTIF_MATCH_WON_BY_LOCAL_PLAYER"
 
 @protocol GameKitTurnBasedMatchHelperDelegate
 - (void)enterNewGame:(GKTurnBasedMatch *)match;
