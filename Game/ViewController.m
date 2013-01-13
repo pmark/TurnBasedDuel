@@ -55,6 +55,8 @@
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadMatches) name:NOTIF_MATCH_QUIT_BY_LOCAL_PLAYER object:nil];
     
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(fetchMatches) name:UIApplicationDidBecomeActiveNotification object:nil];
+    
 }
 
 - (void)loadMatches
@@ -63,6 +65,11 @@
     self.sortedMatches = [NSMutableArray arrayWithArray:[[GameKitTurnBasedMatchHelper sharedInstance].matches allValues]];
     [self.menuCollection reloadData];
     
+}
+
+- (void)fetchMatches
+{
+    [[GameKitTurnBasedMatchHelper sharedInstance] loadMatches];
 }
 
 - (void)viewWillAppear:(BOOL)animated

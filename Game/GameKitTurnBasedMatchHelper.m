@@ -136,58 +136,13 @@ static GameKitTurnBasedMatchHelper *sharedHelper = nil;
 -(void)turnBasedMatchmakerViewController:(GKTurnBasedMatchmakerViewController *)viewController
                       playerQuitForMatch:(GKTurnBasedMatch *)match
 {
-    NSLog(@"playerQuitForMatch, %@, %@", match.matchID, [APP_DELEGATE.playerCache playerWithID:match.currentParticipant.playerID].alias);
+    NSLog(@"playerQuitForMatch, %@, %@",
+          match.matchID,
+          [APP_DELEGATE.playerCache playerWithID:match.currentParticipant.playerID].alias);
     
+    // TODO: Move the guts of the quit code somewhere else.
 
-    NSUInteger currentIndex = [match.participants indexOfObject:match.currentParticipant];
-    GKTurnBasedParticipant *part;
-    
-    NSMutableArray *nextParticipants = [NSMutableArray array];
-    NSInteger matchSize = [match.participants count];
-    
-    for (int i = 0; i < matchSize; i++)
-    {        
-        part = [match.participants objectAtIndex:(currentIndex + 1 + i) % match.participants.count];
-        
-        if (part.matchOutcome != GKTurnBasedMatchOutcomeQuit)
-        {
-            [nextParticipants addObject:part];
-        }
-    }
-
-    if ([nextParticipants count] < 2)
-    {
-        // Last person standing.
-        
-        [match endMatchInTurnWithMatchData:match.matchData
-                         completionHandler:^(NSError *error) {
-                             if (error)
-                             {
-                                 NSLog(@"[GKTBMH] endMatchInTurnWithMatchData error: %@", error.localizedDescription);
-                             }
-                             else
-                             {
-                                 NSLog(@"[GKTBMH] endMatchInTurnWithMatchData completed.");
-                             }
-                         }];
-    }
-    else
-    {
-        [match participantQuitInTurnWithOutcome:GKTurnBasedMatchOutcomeQuit
-                               nextParticipants:nextParticipants
-                                    turnTimeout:INT_MAX
-                                      matchData:match.matchData
-                              completionHandler:^(NSError *error) {
-                                  if (error)
-                                  {
-                                      NSLog(@"[GKTBMH] participantQuitInTurnWithOutcome error: %@", error.localizedDescription);
-                                  }
-                                  else
-                                  {
-                                      NSLog(@"[GKTBMH] participantQuitInTurnWithOutcome completed.");
-                                  }
-                              }];
-    }
+    [self quitMatch:match forParticipant:[GameKitTurnBasedMatchHelper participantForLocalPlayerInMatch:match]];
 
     [self.matches setValue:match forKey:match.matchID];
 }
@@ -218,26 +173,24 @@ static GameKitTurnBasedMatchHelper *sharedHelper = nil;
           [GameKitTurnBasedMatchHelper matchStatusDisplayName:match.status],
           match.matchID);
     
+    
+    // TODO: End game if all other competitors' status != None.
+    
+    GKTurnBasedParticipant *localParticipant = [GameKitTurnBasedMatchHelper participantForLocalPlayerInMatch:match];
     NSString *localPlayerID = [GKLocalPlayer localPlayer].playerID;
-    BOOL myTurn = ([match.currentParticipant.playerID isEqualToString:localPlayerID]);
-
+    BOOL isMyTurn = ([match.currentParticipant.playerID isEqualToString:localPlayerID]);
+    BOOL gameOver = YES;
 
     // This happens after the other player quits too.
     
-    BOOL gameOver = YES;
-    GKTurnBasedParticipant *myParticipant = nil;
-    
     for (GKTurnBasedParticipant *participant in match.participants)
     {
-        NSLog(@"[GKTBMH] handleTurnEventForMatch %@ status: %i", [APP_DELEGATE.playerCache playerWithID:participant.playerID].alias, participant.matchOutcome);
+        NSLog(@"[GKTBMH] handleTurnEventForMatch %@ status: %i",
+              [APP_DELEGATE.playerCache playerWithID:participant.playerID].alias,
+              participant.matchOutcome);
 
-        if ([participant.playerID isEqualToString:localPlayerID])
-        {
-            myParticipant = participant;
-            
-            
-        }
-        else if (participant.matchOutcome == GKTurnBasedMatchOutcomeNone)
+        if (![participant.playerID isEqualToString:localPlayerID] &&
+            participant.matchOutcome == GKTurnBasedMatchOutcomeNone)
         {
             gameOver = NO;
             break;
@@ -247,9 +200,9 @@ static GameKitTurnBasedMatchHelper *sharedHelper = nil;
     if (gameOver)
     {
         // I win.
-        myParticipant.matchOutcome = GKTurnBasedMatchOutcomeWon;
+        localParticipant.matchOutcome = GKTurnBasedMatchOutcomeWon;
         
-        if (myTurn)
+        if (isMyTurn)
         {
             // End as victor.
             
@@ -311,7 +264,7 @@ static GameKitTurnBasedMatchHelper *sharedHelper = nil;
             
             // You're looking at the match that just received a turn.
 
-            if (myTurn)
+            if (isMyTurn)
             {
                 // It's your turn.
                 
@@ -350,9 +303,20 @@ static GameKitTurnBasedMatchHelper *sharedHelper = nil;
     }
 }
 
+BOOL _loadingMatches;
 - (void)loadMatches
 {
+    if (_loadingMatches)
+        return;
+    
+    _loadingMatches = YES;
+    
     [GKTurnBasedMatch loadMatchesWithCompletionHandler:^(NSArray *matches, NSError *error) {
+        
+        if (error)
+        {
+            NSLog(@"Error fetching matches: %@", error.localizedDescription);
+        }
 
         self.matches = [NSMutableDictionary dictionaryWithCapacity:[matches count]];
 
@@ -365,6 +329,8 @@ static GameKitTurnBasedMatchHelper *sharedHelper = nil;
         {
             [self.tbDelegate didFetchMatches:matches];
         }
+        
+        _loadingMatches = NO;
     }];
 }
 
@@ -421,6 +387,160 @@ static GameKitTurnBasedMatchHelper *sharedHelper = nil;
     }
     
     return name;
+}
+
+- (void)quitMatch:(GKTurnBasedMatch*)match forParticipant:(GKTurnBasedParticipant*)participant
+{
+    NSString *localPlayerID = [GKLocalPlayer localPlayer].playerID;
+    BOOL isLocalPlayer = [localPlayerID isEqualToString:participant.playerID];
+    BOOL isCurrentParticipant = [match.currentParticipant.playerID isEqualToString:participant.playerID];
+    NSArray *activeParticipants = [GameKitTurnBasedMatchHelper activeParticipantsInMatch:match];
+    NSInteger activeParticipantCount = [activeParticipants count];
+
+    if (isLocalPlayer)
+    {
+        if (isCurrentParticipant)
+        {
+            if (activeParticipantCount < 3)
+            {
+                // Set both players' match outcomes.
+                // TODO: Determine if current player must quit first instead of ending immediately.
+                // TODO: Determine what callback happens for the opponent.
+                
+                for (GKTurnBasedParticipant *p in activeParticipants)
+                {
+                    if (p.matchOutcome != GKTurnBasedMatchOutcomeQuit)
+                    {
+                        if ([p.playerID isEqualToString:localPlayerID])
+                        {
+                            // It's me.
+                            p.matchOutcome = GKTurnBasedMatchOutcomeQuit;
+                        }
+                        else
+                        {
+                            // Opponent wins.
+                            p.matchOutcome = GKTurnBasedMatchOutcomeWon;
+                        }
+                    }
+                    
+                    NSLog(@"[GVC] endGame participant %@ matchOutcome: %i",
+                          [APP_DELEGATE.playerCache playerWithID:p.playerID].alias,
+                          p.matchOutcome);
+                }
+                
+                [match endMatchInTurnWithMatchData:match.matchData
+                                 completionHandler:^(NSError *error) {
+                                     if (error)
+                                     {
+                                         NSLog(@"[GKTBMH] quitMatch:forParticipant: endMatch error: %@", error.localizedDescription);
+                                     }
+                                     else
+                                     {
+                                         NSLog(@"[GKTBMH] quitMatch:forParticipant: endMatch completed.");
+                                     }
+                                 }];
+            }
+            else
+            {
+                NSArray *nextParticipants = [GameKitTurnBasedMatchHelper otherParticipantsInMatch:match];
+
+                [match participantQuitInTurnWithOutcome:GKTurnBasedMatchOutcomeQuit
+                                       nextParticipants:nextParticipants
+                                            turnTimeout:INT_MAX
+                                              matchData:match.matchData
+                                      completionHandler:^(NSError *error) {
+                                          if (error)
+                                          {
+                                              NSLog(@"[GKTBMH] quitMatch:forParticipant: error: %@", error.localizedDescription);
+                                          }
+                                          else
+                                          {
+                                              NSLog(@"[GKTBMH] quitMatch:forParticipant: completed.");
+                                          }
+                                      }];
+            }
+        }
+        else
+        {
+            [match participantQuitOutOfTurnWithOutcome:GKTurnBasedMatchOutcomeQuit
+                                 withCompletionHandler:^(NSError *error) {
+                                     if (error)
+                                     {
+                                         NSLog(@"[GKTBMH] quitMatch:forParticipant: quit out of turn error: %@", error.localizedDescription);
+                                     }
+                                     else
+                                     {
+                                         NSLog(@"[GKTBMH] quitMatch:forParticipant: quit out of turn completed.");
+                                     }
+                                 }];
+        }
+    }
+    else
+    {
+        // TODO: Figure out if this ever happens.
+        NSAssert(NO, @"[GKTBMH] I wasn't sure that quitMatch:forParticipant: would be called for other players.");
+    }
+    
+}
+
++ (GKTurnBasedParticipant*)participantForLocalPlayerInMatch:(GKTurnBasedMatch*)match
+{
+    NSString *localPlayerID = [GKLocalPlayer localPlayer].playerID;
+    GKTurnBasedParticipant *localPlayerParticipant = nil;
+    
+    for (GKTurnBasedParticipant *p in match.participants)
+    {
+        if ([p.playerID isEqualToString:localPlayerID])
+        {
+            localPlayerParticipant = p;
+            break;
+        }
+    }
+    
+    return localPlayerParticipant;
+}
+
+// Returns an array of participants after match's current participant.
++ (NSArray*)otherParticipantsInMatch:(GKTurnBasedMatch*)match
+{
+    NSUInteger currentIndex = [match.participants indexOfObject:match.currentParticipant];
+    NSMutableArray *nextParticipants = [NSMutableArray array];
+    NSInteger matchSize = [match.participants count];
+    
+    if (matchSize > 0)
+    {
+        for (int i = 0; i < matchSize; i++)
+        {
+            GKTurnBasedParticipant *p = [match.participants
+                                         objectAtIndex:(currentIndex + 1 + i) %
+                                         matchSize];
+            
+            if (![p.playerID isEqualToString:match.currentParticipant.playerID] &&
+                p.status == GKTurnBasedParticipantStatusActive &&
+                p.matchOutcome == GKTurnBasedMatchOutcomeNone)
+            {
+                [nextParticipants addObject:p];
+            }
+        }
+    }
+    
+    return nextParticipants;
+}
+
++ (NSArray*)activeParticipantsInMatch:(GKTurnBasedMatch*)match
+{
+    NSMutableArray *a = [NSMutableArray array];
+    
+    for (GKTurnBasedParticipant *p in match.participants)
+    {
+        if (p.status == GKTurnBasedParticipantStatusActive &&
+            p.matchOutcome == GKTurnBasedMatchOutcomeNone)
+        {
+            [a addObject:p];
+        }
+    }
+    
+    return a;
 }
 
 @end

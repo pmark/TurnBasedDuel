@@ -34,9 +34,9 @@
                                                  name:NOTIF_PLAYER_CACHE_DID_FETCH_PLAYER_PHOTO
                                                object:nil];
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(:)
-                                                 name:NOTIF_MATCH_TURN_CHANGED_TO_LOCAL_PLAYER
-                                               object:self.match];
+//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(:)
+//                                                 name:NOTIF_MATCH_TURN_CHANGED_TO_LOCAL_PLAYER
+//                                               object:self.match];
     
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(handleTurn:)
@@ -174,8 +174,11 @@
 - (IBAction)resignButtonWasTapped:(id)sender
 {
     // TODO: Be busy.
-
-    [self bowOut];
+    
+    GKTurnBasedParticipant *p = [GameKitTurnBasedMatchHelper participantForLocalPlayerInMatch:self.match];
+    
+    [[GameKitTurnBasedMatchHelper sharedInstance] quitMatch:self.match
+                                             forParticipant:p];
 }
 
 - (void)endGame
@@ -202,7 +205,9 @@
                 }
             }
             
-            NSLog(@"[GVC] endGame participant %@ matchOutcome: %i", [APP_DELEGATE.playerCache playerWithID:participant.playerID].alias, participant.matchOutcome);
+            NSLog(@"[GVC] endGame participant %@ matchOutcome: %i",
+                  [APP_DELEGATE.playerCache playerWithID:participant.playerID].alias,
+                  participant.matchOutcome);
         }
         
         [self.match endMatchInTurnWithMatchData:self.match.matchData

@@ -37,9 +37,13 @@
 
 + (GameKitTurnBasedMatchHelper *)sharedInstance;
 + (NSString*)matchStatusDisplayName:(GKTurnBasedMatchStatus)status;
++ (GKTurnBasedParticipant*)participantForLocalPlayerInMatch:(GKTurnBasedMatch*)match;
+
 - (void)findMatchWithMinPlayers:(int)minPlayers
                      maxPlayers:(int)maxPlayers
             showExistingMatches:(BOOL)showExistingMatches;
 - (void)cachePlayerData;
+- (void)loadMatches;
+- (void)quitMatch:(GKTurnBasedMatch*)match forParticipant:(GKTurnBasedParticipant*)participant;
 
 @end
