@@ -27,7 +27,7 @@
 @end
 
 
-@interface GameKitTurnBasedMatchHelper : GameKitHelper <GKTurnBasedMatchmakerViewControllerDelegate, GKTurnBasedEventHandlerDelegate,GKFriendRequestComposeViewControllerDelegate, GKTurnBasedEventHandlerDelegate>
+@interface GameKitTurnBasedMatchHelper : GameKitHelper <GKTurnBasedMatchmakerViewControllerDelegate, GKTurnBasedEventHandlerDelegate, GKFriendRequestComposeViewControllerDelegate>
 {
 }
 

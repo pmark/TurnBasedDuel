@@ -56,14 +56,14 @@
     {
         [self setLastError:error];
         
-        if (localPlayer.authenticated)
+        if (viewController)
+        {
+            [self presentViewController:viewController];
+        }
+        else if ([GKLocalPlayer localPlayer].isAuthenticated)
         {
             self.gameCenterFeaturesEnabled = YES;
             [self localPlayerWasAuthenticated];
-        }
-        else if (viewController)
-        {
-            [self presentViewController:viewController];
         }
         else
         {

@@ -20,30 +20,6 @@
 
 @implementation GameKitTurnBasedMatchHelper
 
-///
-- (void) authenticateLocalPlayer
-{
-    GKLocalPlayer *localPlayer = [GKLocalPlayer localPlayer];
-    localPlayer.authenticateHandler = ^(UIViewController *viewController, NSError *error){
-        if (viewController != nil)
-        {
-            //showAuthenticationDialogWhenReasonable: is an example method name. Create your own method that displays an authentication view when appropriate for your app.
-            [self showAuthenticationDialogWhenReasonable: viewController];
-        }
-        else if (localPlayer.isAuthenticated)
-        {
-            //authenticatedPlayer: is an example method name. Create your own method that is called after the loacal player is authenticated.
-            [self authenticatedPlayer: localPlayer];
-        }
-        else
-        {
-            [self disableGameCenter];
-        }
-    }];
-}
-
-///
-
 static GameKitTurnBasedMatchHelper *sharedHelper = nil;
 
 + (GameKitTurnBasedMatchHelper *) sharedInstance
@@ -191,7 +167,7 @@ static GameKitTurnBasedMatchHelper *sharedHelper = nil;
     [self presentViewController:viewController];
 }
 
--(void)handleTurnEventForMatch:(GKTurnBasedMatch *)match
+- (void)handleTurnEventForMatch:(GKTurnBasedMatch *)match didBecomeActive:(BOOL)didBecomeActive
 {
     NSLog(@"[GKTBMH] handleTurnEventForMatch (%@) %@",
           [GameKitTurnBasedMatchHelper matchStatusDisplayName:match.status],

@@ -198,6 +198,11 @@
 			attributes = {
 				LastUpgradeCheck = 0450;
 				ORGANIZATIONNAME = "Bordertown Labs";
+				TargetAttributes = {
+					A6061F591693E99B003B3640 = {
+						DevelopmentTeam = 4N7S43D8NS;
+					};
+				};
 			};
 			buildConfigurationList = A6061F541693E99B003B3640 /* Build configuration list for PBXProject "Game" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -300,7 +305,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
-				PROVISIONING_PROFILE = "F9D4754F-6DFD-4849-A2A6-F21687B4B10C";
+				PROVISIONING_PROFILE = "87C0DFC4-60C1-4B77-88D6-F7106ECBBF6E";
 				SDKROOT = iphoneos;
 			};
 			name = Debug;
@@ -329,6 +334,8 @@
 		A6061F7F1693E99B003B3640 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Game/Game-Prefix.pch";
 				INFOPLIST_FILE = "Game/Game-Info.plist";
@@ -340,6 +347,8 @@
 		A6061F801693E99B003B3640 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Game/Game-Prefix.pch";
 				INFOPLIST_FILE = "Game/Game-Info.plist";
