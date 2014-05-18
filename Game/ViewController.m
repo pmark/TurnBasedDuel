@@ -115,10 +115,10 @@
     }
     else
     {
-        int playerNum = [match.participants indexOfObject:match.currentParticipant] + 1;
+        NSUInteger playerNum = [match.participants indexOfObject:match.currentParticipant] + 1;
 
         statusString = [NSString stringWithFormat:
-                        @"Player %d's Turn", playerNum];
+                        @"Player %i's Turn", (int)playerNum];
     }
     
 //    NSString *storySoFar = [NSString stringWithUTF8String:
@@ -302,7 +302,7 @@
             NSString *msg = nil;
             for (GKTurnBasedParticipant *participant in match.participants)
             {
-                NSLog(@"[VC] participant %@ matchOutcome: %i", [APP_DELEGATE.playerCache playerWithID:participant.playerID].alias, participant.matchOutcome);
+                NSLog(@"[VC] participant %@ matchOutcome: %li", [APP_DELEGATE.playerCache playerWithID:participant.playerID].alias, (long)participant.matchOutcome);
 
                 if (participant.matchOutcome != GKTurnBasedMatchOutcomeNone)
                 {

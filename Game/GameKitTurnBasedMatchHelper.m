@@ -185,9 +185,9 @@ static GameKitTurnBasedMatchHelper *sharedHelper = nil;
     
     for (GKTurnBasedParticipant *participant in match.participants)
     {
-        NSLog(@"[GKTBMH] handleTurnEventForMatch %@ status: %i",
+        NSLog(@"[GKTBMH] handleTurnEventForMatch %@ status: %li",
               [APP_DELEGATE.playerCache playerWithID:participant.playerID].alias,
-              participant.matchOutcome);
+              (long)participant.matchOutcome);
 
         if (![participant.playerID isEqualToString:localPlayerID] &&
             participant.matchOutcome == GKTurnBasedMatchOutcomeNone)
@@ -423,9 +423,9 @@ BOOL _loadingMatches;
                         }
                     }
                     
-                    NSLog(@"[GVC] endGame participant %@ matchOutcome: %i",
+                    NSLog(@"[GVC] endGame participant %@ matchOutcome: %li",
                           [APP_DELEGATE.playerCache playerWithID:p.playerID].alias,
-                          p.matchOutcome);
+                          (long)p.matchOutcome);
                 }
                 
                 [match endMatchInTurnWithMatchData:match.matchData

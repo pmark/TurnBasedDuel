@@ -17,7 +17,6 @@
 		A6061F7B1693E99B003B3640 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A6061F7A1693E99B003B3640 /* ViewController.m */; };
 		A6061F821693E9BA003B3640 /* GameKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A6061F811693E9BA003B3640 /* GameKit.framework */; };
 		A6061F851693E9E1003B3640 /* GameKitTurnBasedMatchHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = A6061F841693E9E1003B3640 /* GameKitTurnBasedMatchHelper.m */; };
-		A6061F8C1693F665003B3640 /* GameKitHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = A6061F8B1693F665003B3640 /* GameKitHelper.m */; };
 		A6061FB716942D74003B3640 /* GameViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A6061FB616942D74003B3640 /* GameViewController.m */; };
 		A60620DA16964BE2003B3640 /* PlayerCache.m in Sources */ = {isa = PBXBuildFile; fileRef = A60620D916964BE1003B3640 /* PlayerCache.m */; };
 		A611942016968EE30074FB9B /* MatchCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A611941F16968EE20074FB9B /* MatchCell.m */; };
@@ -51,8 +50,6 @@
 		A6061F811693E9BA003B3640 /* GameKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameKit.framework; path = System/Library/Frameworks/GameKit.framework; sourceTree = SDKROOT; };
 		A6061F831693E9E1003B3640 /* GameKitTurnBasedMatchHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameKitTurnBasedMatchHelper.h; sourceTree = "<group>"; };
 		A6061F841693E9E1003B3640 /* GameKitTurnBasedMatchHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GameKitTurnBasedMatchHelper.m; sourceTree = "<group>"; };
-		A6061F8A1693F665003B3640 /* GameKitHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameKitHelper.h; sourceTree = "<group>"; };
-		A6061F8B1693F665003B3640 /* GameKitHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GameKitHelper.m; sourceTree = "<group>"; };
 		A6061F8D1693F72A003B3640 /* GameConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameConstants.h; sourceTree = "<group>"; };
 		A6061FB516942D74003B3640 /* GameViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameViewController.h; sourceTree = "<group>"; };
 		A6061FB616942D74003B3640 /* GameViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GameViewController.m; sourceTree = "<group>"; };
@@ -123,8 +120,6 @@
 				A6061F6D1693E99B003B3640 /* AppDelegate.h */,
 				A6061F6E1693E99B003B3640 /* AppDelegate.m */,
 				A6061F8D1693F72A003B3640 /* GameConstants.h */,
-				A6061F8A1693F665003B3640 /* GameKitHelper.h */,
-				A6061F8B1693F665003B3640 /* GameKitHelper.m */,
 				A6061F831693E9E1003B3640 /* GameKitTurnBasedMatchHelper.h */,
 				A6061F841693E9E1003B3640 /* GameKitTurnBasedMatchHelper.m */,
 				A6061FB516942D74003B3640 /* GameViewController.h */,
@@ -196,7 +191,7 @@
 		A6061F511693E99B003B3640 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0450;
+				LastUpgradeCheck = 0510;
 				ORGANIZATIONNAME = "Bordertown Labs";
 				TargetAttributes = {
 					A6061F591693E99B003B3640 = {
@@ -253,7 +248,6 @@
 				A6061F6F1693E99B003B3640 /* AppDelegate.m in Sources */,
 				A6061F7B1693E99B003B3640 /* ViewController.m in Sources */,
 				A6061F851693E9E1003B3640 /* GameKitTurnBasedMatchHelper.m in Sources */,
-				A6061F8C1693F665003B3640 /* GameKitHelper.m in Sources */,
 				A6061FB716942D74003B3640 /* GameViewController.m in Sources */,
 				A60620DA16964BE2003B3640 /* PlayerCache.m in Sources */,
 				A611942016968EE30074FB9B /* MatchCell.m in Sources */,
@@ -305,6 +299,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				ONLY_ACTIVE_ARCH = YES;
 				PROVISIONING_PROFILE = "87C0DFC4-60C1-4B77-88D6-F7106ECBBF6E";
 				SDKROOT = iphoneos;
 			};

@@ -205,9 +205,9 @@
                 }
             }
             
-            NSLog(@"[GVC] endGame participant %@ matchOutcome: %i",
+            NSLog(@"[GVC] endGame participant %@ matchOutcome: %li",
                   [APP_DELEGATE.playerCache playerWithID:participant.playerID].alias,
-                  participant.matchOutcome);
+                  (long)participant.matchOutcome);
         }
         
         [self.match endMatchInTurnWithMatchData:self.match.matchData
